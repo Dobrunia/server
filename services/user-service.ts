@@ -117,3 +117,7 @@ export async function refresh(refreshToken: string) {
     throw ApiError.UnauthorizedError()
   }
 }
+
+export async function returnAllUsers() {
+  return await find(`users`);
+}

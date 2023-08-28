@@ -10,7 +10,7 @@ export function initSocket(app, PORT) {
   });
   io.on('connection', (socket) => {
     // notify existing users
-    console.log(socket);
+    // console.log(socket);
     socket.broadcast.emit('user connected', {
       //обработать статус
       //userID: socket.id,
