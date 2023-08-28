@@ -10,31 +10,32 @@ export function initSocket(app, PORT) {
   });
   io.on('connection', (socket) => {
     // notify existing users
-    console.log('connection');
+    console.log(socket);
     socket.broadcast.emit('user connected', {
       //обработать статус
-      userID: socket.id,
-      username: (socket as any).username,
+      //userID: socket.id,
+      userID: (socket as any).email,
     });
+    socket.join((socket as any).email);
     socket.on('private message', ({ content, to }) => {
       socket.to(to).emit('private message', {
         content,
-        from: (socket as any).username,
+        from: (socket as any).email,
       });
-      console.log('первое получ сервером ' + (socket as any).username + to);
+      console.log('первое получ сервером ' + (socket as any).email + to);
     });
   });
 
   io.use((socket, next) => {
-    const username = socket.handshake.auth.username;
-    console.log('io.use ' + username);
-    if (!username) {
+    const email = socket.handshake.auth.email;
+    console.log('io.use ' + email);
+    if (!email) {
       return next(new Error('invalid username'));
     }
-    (socket as any).username = username;
+    (socket as any).email = email;
     next();
   });
-//   server.listen(PORT, () => {
-//     console.log('Server running on Port ', PORT);  
-//   });
+  server.listen(PORT, () => {
+    console.log('Server running on Port ', PORT);
+  });
 }
