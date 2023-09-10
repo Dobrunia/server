@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { router } from './router/router';
 import cookieParser from 'cookie-parser';
-import { checkHeader } from './middlewares/auth';
+import { errorHandler } from './middlewares/error';
 import { initSocket } from './socket/socket';
 
 const server = express();
@@ -15,7 +15,7 @@ server.use(
 server.use(express.json());
 server.use(cookieParser());
 server.use('/api', router);
-// server.use(checkHeader);
+server.use(errorHandler);
 const PORT = 5000;
 
 const start = async () => {
