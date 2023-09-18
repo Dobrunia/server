@@ -16,7 +16,7 @@ export function initSocket(app, PORT) {
       //userID: socket.id,
       userID: (socket as any).email,
     });
-    socket.join((socket as any).email);
+    socket.join((socket as any).email);//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru'
     socket.on('private message', ({ content, to }) => {
       socket.to(to).emit('private message', {
         content,
