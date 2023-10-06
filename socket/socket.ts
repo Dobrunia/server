@@ -16,8 +16,9 @@ export function initSocket(app, PORT) {
       //userID: socket.id,
       userID: (socket as any).email,
     });
-    socket.join((socket as any).email);//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru'
+    socket.join('dobruniak@rambler.rulents@mail.ru');//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru' (socket as any).email
     socket.on('private message', ({ content, to }) => {
+      //TODO:: если чат не  новый чатайди число, то просто сохраняем месседж в базу. Иначе создаем чат, добавляем обоих себеседников в чат и сохраняем месседж и после этого нужно пересоздать группу сокета с новым чатайди
       socket.to(to).emit('private message', {
         content,
         from: (socket as any).email,

@@ -7,6 +7,7 @@ import {
   returnAllUsers,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
+import { returnChatId } from '../services/chat-service';
 
 class UserController {
   async authorization(request, response, next) {
@@ -34,10 +35,8 @@ class UserController {
   }
   async refresh(request, response, next) {
     try {
-      const {refreshToken} = request.cookies;
-    } catch {
-
-    }
+      const { refreshToken } = request.cookies;
+    } catch {}
   }
   async changeUsername(request, response, next) {
     const username = request.body.username;
@@ -84,6 +83,10 @@ class UserController {
   async returnAllUsers(request, response, next) {
     const users_response = await returnAllUsers();
     response.json(users_response);
+  }
+  async findChatByUserId(request, response, next) {
+    const chat_id = await returnChatId(request.params.id, request.params.hostUserId);
+    response.json(chat_id);
   }
 }
 
