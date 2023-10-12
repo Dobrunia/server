@@ -10,5 +10,6 @@ router.get('/refresh', userController.refresh);
  
 router.post('/changeUsername', checkHeader, userController.changeUsername);
 router.get('/find-users', checkHeader, userController.findUsers);
+router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/findChatByUserId/:id', checkHeader, userController.findChatByUserId);
