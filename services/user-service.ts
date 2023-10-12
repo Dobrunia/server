@@ -64,6 +64,7 @@ export async function confirmEmail(id: number) {
 
 export async function authorization(email: string, passwordHash: string) {
   const user = await findUserByEmail(email);
+  const id = user.id;
   const hash = user.password;
   const username = user.username;
   const avatar = user.avatar;
@@ -82,7 +83,7 @@ export async function authorization(email: string, passwordHash: string) {
     `email`,
     `'${email}'`,
   );
-  return { email, username, avatar, accessToken, refreshToken };
+  return { id, email, username, avatar, accessToken, refreshToken };
 }
 
 export async function changeUsername(username: string, email: string) {
