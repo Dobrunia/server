@@ -1,6 +1,6 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set } from './sqlwrapper';
+import { find, conn, set, setPost } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
@@ -15,7 +15,7 @@ export async function findUserById(search_Id_Value: string) {
 }
 
 export async function getUserPosts(search_Id_Value: string) {
-  return await find(`posts`, 'authorId LIKE ?', search_Id_Value);
+  return await find(`posts`, 'wallId LIKE ?', search_Id_Value);
 }
 
 export async function findUserByEmail(email: string) {
@@ -98,6 +98,15 @@ export async function changeUsername(username: string, email: string) {
     `email`,
     `'${email}'`,
   );
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully changed your username';
+  } else {
+    return false;
+  }
+}
+
+export async function addPost(DATA) {
+  const isSet = await setPost(DATA);
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully changed your username';
   } else {

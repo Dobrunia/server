@@ -7,6 +7,7 @@ import {
   returnAllUsers,
   findUserById,
   getUserPosts,
+  addPost,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 import { returnChatId } from '../services/chat-service';
@@ -46,6 +47,13 @@ class UserController {
     const res = await changeUsername(username, email);
     if (res) {
       response.json(username);
+    }
+  }
+  async addPost(request, response, next) {
+    const DATA = request.body.DATA;
+    const res = await addPost(DATA);
+    if (res) {
+      response.json(res);
     }
   }
   async verification(request, response, next) {
