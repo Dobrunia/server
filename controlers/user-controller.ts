@@ -6,6 +6,7 @@ import {
   changeUsername,
   returnAllUsers,
   findUserById,
+  getUserPosts,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 import { returnChatId } from '../services/chat-service';
@@ -84,6 +85,11 @@ class UserController {
   async findUserById(request, response, next) {
     const search_Id_Value = request.query.search_value;
     const users_response = await findUserById(search_Id_Value);
+    response.json(users_response);
+  }
+  async getUserPosts(request, response, next) {
+    const search_Id_Value = request.query.search_value;
+    const users_response = await getUserPosts(search_Id_Value);
     response.json(users_response);
   }
   async returnAllUsers(request, response, next) {

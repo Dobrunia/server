@@ -14,6 +14,10 @@ export async function findUserById(search_Id_Value: string) {
   return await find(`users`, 'id LIKE ?', search_Id_Value);
 }
 
+export async function getUserPosts(search_Id_Value: string) {
+  return await find(`posts`, 'authorId LIKE ?', search_Id_Value);
+}
+
 export async function findUserByEmail(email: string) {
   const users = await find(`users`, '`email` = ?', email);
   if (users.length <= 0) {
