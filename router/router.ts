@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { userController } from '../controlers/user-controller';
+import { chatController } from '../controlers/chat-controller';
 import { checkHeader } from '../middlewares/auth';
 
 export const router = Router();
@@ -15,3 +16,7 @@ router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/get-user-posts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/findChatByUserId/:id', checkHeader, userController.findChatByUserId);
+
+
+
+router.get('/returnActiveChats/:id', checkHeader, chatController.returnAllUserChats);
