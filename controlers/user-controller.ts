@@ -50,11 +50,11 @@ class UserController {
     }
   }
   async addPost(request, response, next) {
-    const DATA = request.body.DATA;
+    const DATA = request.body;
     const res = await addPost(DATA);
     if (res) {
       response.json(res);
-    }
+    } 
   }
   async verification(request, response, next) {
     if (request.params.link) {
