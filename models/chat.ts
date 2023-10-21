@@ -5,5 +5,5 @@
     name: string
     avatar: string
     last_message: string
-    time: Date
+    datetime: Date
 }

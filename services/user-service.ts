@@ -1,6 +1,6 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set, setPost } from './sqlwrapper';
+import { find, conn, set, setPost, findFriendStatusInfo } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
@@ -108,7 +108,8 @@ export async function changeUsername(username: string, email: string) {
 export async function addPost(DATA) {
   const isSet = await setPost(DATA);
   if ((isSet as any).affectedRows === 1) {
-    return 'You have successfully changed your username';
+    console.log((isSet as any).affectedRows[0]);
+    return 'You have successfully added the post';
   } else {
     return false;
   }
@@ -138,4 +139,8 @@ export async function refresh(refreshToken: string) {
 
 export async function returnAllUsers() {
   return await find(`users`);
+}
+
+export async function getFriendStatusInfo(userId: string, status: string) {
+  return await findFriendStatusInfo(userId, status);
 }

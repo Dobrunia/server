@@ -23,7 +23,7 @@ export async function returnAllUserChats(userId): Promise<Chat[]> {
     chat.name = ch.username;
     chat.avatar = ch.avatar;
     chat.last_message = ch.content;
-    chat.time = ch.datetime;
+    chat.datetime = ch.datetime;
     return chat;
   });
 }

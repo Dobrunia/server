@@ -54,7 +54,28 @@ export async function set(
 export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      `INSERT INTO posts (id, wallId, authorId, text, photos, files) VALUES (NULL, '${DATA.wallId}', '${DATA.authorId}', '${DATA.postText}', '${DATA.photo}', '${DATA.file}');`,
+      'INSERT INTO posts SET ?',
+      DATA,
+    );
+    // const results = await conn.query<RowDataPacket[]>(
+    //   `INSERT INTO posts (id, wallId, authorId, text, photos, files) VALUES (NULL, '${DATA.wallId}', '${DATA.authorId}', '${DATA.postText}', '${DATA.photo}', '${DATA.file}');`,
+    // );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function findFriendStatusInfo(
+  user_id: string,
+  status: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const str_user_id = user_id.split('=')[1];
+    const str_status = status.split('=')[1];
+    const results = await conn.query<mysql.RowDataPacket[]>(
+      'SELECT * FROM friends WHERE user_id = ? AND status = ?',
+      [str_user_id, str_status], // userId=27 status=accepted
     );
     return results[0];
   } catch (ex) {
