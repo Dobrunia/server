@@ -141,6 +141,6 @@ export async function returnAllUsers() {
   return await find(`users`);
 }
 
-export async function getFriendStatusInfo(userId: string, status: string) {
-  return await findFriendStatusInfo(userId, status);
+export async function getFriendStatusInfo(myId: string, userId: string, status: string) {
+  return await findFriendStatusInfo(myId, userId, status);
 }

@@ -67,15 +67,17 @@ export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
 }
 
 export async function findFriendStatusInfo(
-  user_id: string,
+  myId: string,
+  friend_id: string,
   status: string,
 ): Promise<mysql.RowDataPacket[]> {
   try {
-    const str_user_id = user_id.split('=')[1];
+    const str_myId = myId.split('=')[1];
+    const str_user_id = friend_id.split('=')[1];
     const str_status = status.split('=')[1];
     const results = await conn.query<mysql.RowDataPacket[]>(
-      'SELECT * FROM friends WHERE user_id = ? AND status = ?',
-      [str_user_id, str_status], // userId=27 status=accepted
+      'SELECT * FROM friends WHERE user_id = ? AND friend_id = ? AND status = ?',
+      [str_myId, str_user_id, str_status], // userId=27 status=accepted
     );
     return results[0];
   } catch (ex) {

@@ -17,7 +17,7 @@ router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/get-user-posts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/findChatByUserId/:id', checkHeader, userController.findChatByUserId);
-router.get('/getFriendStatusInfo/:userId/:status', checkHeader, userController.getFriendStatusInfo);
+router.get('/getFriendStatusInfo/:myId/:userId/:status', checkHeader, userController.getFriendStatusInfo);
 
 
 

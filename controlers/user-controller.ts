@@ -105,8 +105,7 @@ class UserController {
     response.json(chat_id);
   }
   async getFriendStatusInfo(request, response, next) {
-    console.log(request.params.userId, request.params.status)
-    const chat_id = await getFriendStatusInfo(request.params.userId, request.params.status);
+    const chat_id = await getFriendStatusInfo(request.params.myId, request.params.userId, request.params.status);
     response.json(chat_id);
   }
 }
