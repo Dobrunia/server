@@ -1,6 +1,6 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest } from './sqlwrapper';
+import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest, responseToFriend } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
@@ -118,6 +118,15 @@ export async function removeFriend(myId: string, friendId: string) {
   const isSet = await removeFriendRequest(myId, friendId);
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully remove friend';
+  } else {
+    return false;
+  }
+}
+
+export async function responseToFriendRequest(myId: string, user_id: string, status: string) {
+  const isSet = await responseToFriend(myId, user_id, status);
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully request to user';
   } else {
     return false;
   }

@@ -117,3 +117,19 @@ export async function removeFriendRequest(
     console.log(ex);
   }
 }
+
+export async function responseToFriend(
+  myId: string,
+  user_id: string,
+  status: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'UPDATE `friends` SET `status`=? WHERE `user_id`=? AND `friend_id`=?',
+      [status, user_id, myId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}

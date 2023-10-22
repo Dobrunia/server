@@ -11,6 +11,7 @@ import {
   getFriendStatusInfo,
   addFriend,
   removeFriend,
+  responseToFriendRequest,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 import { returnChatId } from '../services/chat-service';
@@ -24,6 +25,7 @@ class UserController {
     response.cookie('refreshToken', userData.refreshToken, { httpOnly: true });
     response.json(userData);
   }
+
   async registration(request, response, next) {
     const DATA = {
       username: request.body.username,
@@ -39,11 +41,13 @@ class UserController {
     }
     response.json(userID);
   }
+
   async refresh(request, response, next) {
-      const { refreshToken } = request.cookies;
-      let result = await refresh(refreshToken);
-      response.json(result);
+    const { refreshToken } = request.cookies;
+    let result = await refresh(refreshToken);
+    response.json(result);
   }
+
   async changeUsername(request, response, next) {
     const username = request.body.username;
     const email = request.body.email;
@@ -70,7 +74,17 @@ class UserController {
       response.json(res);
     }
   }
- 
+
+  async responseToFriendRequest(request, response, next) {
+    const myId = request.body.myId;
+    const friend_id = request.body.friend_id;
+    const status = request.body.status;
+    const res = await responseToFriendRequest(myId, friend_id, status);
+    if (res) {
+      response.json(res);
+    }
+  }
+
   async verification(request, response, next) {
     if (request.params.link) {
       const data = {
@@ -113,7 +127,9 @@ class UserController {
   async getUserPosts(request, response, next) {
     const search_Id_Value = request.query.search_value;
     const users_response = await getUserPosts(search_Id_Value);
-    users_response.forEach(u=>{u.photosString = u.photos.toString('base64')});
+    users_response.forEach((u) => {
+      u.photosString = u.photos.toString('base64');
+    });
     response.json(users_response);
   }
   async returnAllUsers(request, response, next) {
@@ -121,11 +137,18 @@ class UserController {
     response.json(users_response);
   }
   async findChatByUserId(request, response, next) {
-    const chat_id = await returnChatId(request.params.id, request.params.hostUserId);
+    const chat_id = await returnChatId(
+      request.params.id,
+      request.params.hostUserId,
+    );
     response.json(chat_id);
   }
   async getFriendStatusInfo(request, response, next) {
-    const chat_id = await getFriendStatusInfo(request.params.myId, request.params.userId, request.params.status);
+    const chat_id = await getFriendStatusInfo(
+      request.params.myId,
+      request.params.userId,
+      request.params.status,
+    );
     response.json(chat_id);
   }
 }
