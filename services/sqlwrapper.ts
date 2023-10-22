@@ -75,7 +75,6 @@ export async function findFriendStatusInfo(
     const user_id = str_myId.split('=')[1];
     const friend_id = str_user_id.split('=')[1];
     const status = str_status.split('=')[1];
-    console.log(str_myId, str_user_id, str_status)
     const sql = `SELECT * FROM friends WHERE user_id = ${user_id} AND friend_id = ${friend_id} AND status = ${status}`;
     // const results = await conn.query<mysql.RowDataPacket[]>(
     //   `SELECT * FROM friends WHERE user_id = ? AND friend_id = ? AND status = ?`,
