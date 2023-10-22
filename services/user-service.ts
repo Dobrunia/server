@@ -1,6 +1,6 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set, setPost, findFriendStatusInfo } from './sqlwrapper';
+import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
@@ -100,6 +100,24 @@ export async function changeUsername(username: string, email: string) {
   );
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully changed your username';
+  } else {
+    return false;
+  }
+}
+
+export async function addFriend(myId: string, friendId: string) {
+  const isSet = await addFriendStatusInfo(myId, friendId);
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully send request';
+  } else {
+    return false;
+  }
+}
+
+export async function removeFriend(myId: string, friendId: string) {
+  const isSet = await removeFriendRequest(myId, friendId);
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully remove friend';
   } else {
     return false;
   }

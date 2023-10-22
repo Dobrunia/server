@@ -9,6 +9,8 @@ import {
   getUserPosts,
   refresh,
   getFriendStatusInfo,
+  addFriend,
+  removeFriend,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 import { returnChatId } from '../services/chat-service';
@@ -48,6 +50,24 @@ class UserController {
     const res = await changeUsername(username, email);
     if (res) {
       response.json(username);
+    }
+  }
+
+  async addFriend(request, response, next) {
+    const myId = request.body.myId;
+    const friendId = request.body.friendId;
+    const res = await addFriend(myId, friendId);
+    if (res) {
+      response.json(res);
+    }
+  }
+
+  async removeFriend(request, response, next) {
+    const myId = request.body.myId;
+    const friendId = request.body.friendId;
+    const res = await removeFriend(myId, friendId);
+    if (res) {
+      response.json(res);
     }
   }
  

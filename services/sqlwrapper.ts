@@ -66,7 +66,7 @@ export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
-export async function findFriendStatusInfo(
+export async function findFriendStatusInfo( //TODO:: sql
   str_myId: string,
   str_user_id: string,
   str_status: string,
@@ -81,6 +81,37 @@ export async function findFriendStatusInfo(
     //   [user_id, friend_id, status], // userId=27 status=accepted
     // );
     const results = await conn.query<mysql.RowDataPacket[]>(sql);
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function addFriendStatusInfo(
+  myId: string,
+  friendId: string,
+): Promise<mysql.RowDataPacket[]> {
+  //TODO:: проверка что в бд есть уже такой запрос
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'INSERT INTO `friends`(`friendship_id`, `user_id`, `friend_id`, `status`) VALUES (NULL,?,?,?)',
+      [myId, friendId, 'pending'],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function removeFriendRequest(
+  user_id: string,
+  friend_id: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'DELETE FROM `friends` WHERE `user_id` = ? AND `friend_id` = ? AND `status` = ?',
+      [user_id, friend_id, `accepted`],
+    );
     return results[0];
   } catch (ex) {
     console.log(ex);

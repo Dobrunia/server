@@ -11,6 +11,8 @@ router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
 
 router.post('/changeUsername', checkHeader, userController.changeUsername);
+router.post('/addFriend', checkHeader, userController.addFriend);
+router.post('/removeFriend', checkHeader, userController.removeFriend);
 router.post('/addPost', multer.single('photo'), messageController.addPost);
 router.get('/find-users', checkHeader, userController.findUsers);
 router.get('/find-user-by-id', checkHeader, userController.findUserById);
