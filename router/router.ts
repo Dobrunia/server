@@ -14,6 +14,7 @@ router.post('/changeUsername', checkHeader, userController.changeUsername);
 router.post('/addFriend', checkHeader, userController.addFriend);
 router.post('/responseToFriendRequest', checkHeader, userController.responseToFriendRequest);
 router.post('/removeFriend', checkHeader, userController.removeFriend);
+router.post('/deletePost', checkHeader, userController.deletePost);
 router.post('/addPost', multer.single('photo'), messageController.addPost);
 router.get('/find-users', checkHeader, userController.findUsers);
 router.get('/find-user-by-id', checkHeader, userController.findUserById);

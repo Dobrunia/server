@@ -133,3 +133,17 @@ export async function responseToFriend(
     console.log(ex);
   }
 }
+
+export async function removePost(
+  postId: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'DELETE FROM `posts` WHERE `id` = ?',
+      [postId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}

@@ -12,6 +12,7 @@ import {
   addFriend,
   removeFriend,
   responseToFriendRequest,
+  deletePost,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 import { returnChatId } from '../services/chat-service';
@@ -70,6 +71,14 @@ class UserController {
     const myId = request.body.myId;
     const friendId = request.body.friendId;
     const res = await removeFriend(myId, friendId);
+    if (res) {
+      response.json(res);
+    }
+  }
+
+  async deletePost(request, response, next) {
+    const postId = request.body.postId;
+    const res = await deletePost(postId);
     if (res) {
       response.json(res);
     }
