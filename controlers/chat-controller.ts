@@ -1,10 +1,23 @@
-import { returnAllUserChats } from '../services/chat-service';
+import { returnAllUserChats, returnChatId, returnMessages } from '../services/chat-service';
 
 class ChatController {
   async returnAllUserChats(request, response, next) {
     const userId = request.params.id;
-    const chats_response = await returnAllUserChats(userId);
-    response.json(chats_response);
+    const chatsResponse = await returnAllUserChats(userId);
+    response.json(chatsResponse);
+  }
+  
+  async findChatByUserId(request, response, next) {
+    const chatId = await returnChatId(
+      request.params.id,
+      request.params.hostUserId,
+    );
+    response.json(chatId);
+  }
+
+  async getMessagesByChatId(request, response, next) {
+    const chatId = await returnMessages(request.params.chatID);
+    response.json(chatId);
   }
 }
 

@@ -105,6 +105,21 @@ export async function changeUsername(username: string, email: string) {
   }
 }
 
+export async function changePhoto(userId: string, photoUrl: string) {
+  const isSet = await set(
+    `users`,
+    `avatar`,
+    `'${photoUrl}'`,
+    `id`,
+    `'${userId}'`,
+  );
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully changed your avatar';
+  } else {
+    return false;
+  }
+}
+
 export async function addFriend(myId: string, friendId: string) {
   const isSet = await addFriendStatusInfo(myId, friendId);
   if ((isSet as any).affectedRows === 1) {

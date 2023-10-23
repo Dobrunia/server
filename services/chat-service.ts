@@ -1,6 +1,7 @@
 import { RowDataPacket } from 'mysql2';
 import { conn } from './sqlwrapper';
 import { Chat } from '../models/chat';
+import { Message } from '../models/message';
 
 export async function returnChatId(userId, hostUserId) {
   const results = await conn.query<RowDataPacket[]>(
@@ -8,6 +9,27 @@ export async function returnChatId(userId, hostUserId) {
     [userId, hostUserId],
   );
   return results[0];
+}
+
+export async function returnMessages(chatId) {
+  const results = await conn.query<RowDataPacket[]>(
+    'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = 2 ORDER BY `datetime` ASC',
+    [chatId],
+  );
+  return results[0].map((u) => {
+    const message = new Message();
+    message.userId = u.userId;
+    message.username = u.username;
+    message.email = u.email;
+    message.avatar = u.avatar;
+    message.permission = u.permission;
+    message.id = u.id;
+    message.content = u.content;
+    message.sendBy = u.sendBy;
+    message.chatID = u.chatID;
+    message.datetime = u.datetime;
+    return message;
+  });
 }
 
 export async function returnAllUserChats(userId): Promise<Chat[]> {

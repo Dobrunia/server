@@ -13,9 +13,9 @@ import {
   removeFriend,
   responseToFriendRequest,
   deletePost,
+  changePhoto,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
-import { returnChatId } from '../services/chat-service';
 
 class UserController {
   async authorization(request, response, next) {
@@ -55,6 +55,15 @@ class UserController {
     const res = await changeUsername(username, email);
     if (res) {
       response.json(username);
+    }
+  }
+
+  async changePhoto(request, response, next) {
+    const userId = request.body.userId;
+    const photoUrl = request.body.photoUrl;
+    const res = await changePhoto(userId, photoUrl);
+    if (res) {
+      response.json(res);
     }
   }
 
@@ -144,13 +153,6 @@ class UserController {
   async returnAllUsers(request, response, next) {
     const users_response = await returnAllUsers();
     response.json(users_response);
-  }
-  async findChatByUserId(request, response, next) {
-    const chat_id = await returnChatId(
-      request.params.id,
-      request.params.hostUserId,
-    );
-    response.json(chat_id);
   }
   async getFriendStatusInfo(request, response, next) {
     const chat_id = await getFriendStatusInfo(

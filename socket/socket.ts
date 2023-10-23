@@ -13,27 +13,31 @@ export function initSocket(app, PORT) {
     // console.log(socket);
     socket.broadcast.emit('user connected', {
       //обработать статус
-      //userID: socket.id,
-      userID: (socket as any).email,
+      //userId: socket.id,
+      userId: (socket as any).userId,
+      chatId: (socket as any).chatId,
     });
-    socket.join('dobruniak@rambler.rulents@mail.ru');//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru' (socket as any).email
+    console.log((socket as any).chatId);
+    socket.join((socket as any).chatId);//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru' (socket as any).email
     socket.on('private message', ({ content, to }) => {
-      //TODO:: если чат не  новый чатайди число, то просто сохраняем месседж в базу. Иначе создаем чат, добавляем обоих себеседников в чат и сохраняем месседж и после этого нужно пересоздать группу сокета с новым чатайди
+      console.log(to);
+      //TODO:: если чат не новый чатайди число, то просто сохраняем месседж в базу. Иначе создаем чат, добавляем обоих себеседников в чат и сохраняем месседж и после этого нужно пересоздать группу сокета с новым чатайди
       socket.to(to).emit('private message', {
         content,
-        from: (socket as any).email,
+        from: (socket as any).userId,
       });
-      console.log('первое получ сервером ' + (socket as any).email + to);
+      console.log('первое получ сервером ' + (socket as any).userId + to);
     });
   });
 
   io.use((socket, next) => {
-    const email = socket.handshake.auth.email;
-    console.log('io.use ' + email);
-    if (!email) {
+    const userId = socket.handshake.auth.userId;
+    const chatId = socket.handshake.auth.chatId;
+    if (!userId) {
       return next(new Error('invalid username'));
     }
-    (socket as any).email = email;
+    (socket as any).userId = userId;
+    (socket as any).chatId = chatId;
     next();
   });
   server.listen(PORT, () => {
