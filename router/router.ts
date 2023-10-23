@@ -14,7 +14,6 @@ router.post('/addFriend', checkHeader, userController.addFriend);
 router.post('/responseToFriendRequest', checkHeader, userController.responseToFriendRequest);
 router.post('/removeFriend', checkHeader, userController.removeFriend);
 router.post('/deletePost', checkHeader, userController.deletePost);
-router.post('/addPost', multer.single('photo'), messageController.addPost);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
@@ -23,6 +22,9 @@ router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/get-user-posts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/getFriendStatusInfo/:myId/:userId/:status', checkHeader, userController.getFriendStatusInfo);
+
+//messageController
+router.post('/addPost', multer.single('photo'), messageController.addPost);
 
 //chatController
 router.get('/findChatByUserId/:id', checkHeader, chatController.findChatByUserId);

@@ -15,12 +15,11 @@ import {
     
     async addPost(request, response, next) {   
       const DATA = {
-        wallId:request.body.wallId,
+        wallId: request.body.wallId,
         authorId: request.body.authorId,
         text: request.body.postText,
         photos: request.file.buffer
       };
-      
       const res = await addPost(DATA);
       if (res) {
         response.json(res);
