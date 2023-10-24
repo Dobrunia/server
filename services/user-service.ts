@@ -1,6 +1,6 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest, responseToFriend, removePost } from './sqlwrapper';
+import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest, responseToFriend, removePost, returnAllUserInfo, returnFriends, saveMessageToDb } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
@@ -12,6 +12,7 @@ export async function findUsername(search_value: string) {
 
 export async function findUserById(search_Id_Value: string) {
   return await find(`users`, 'id LIKE ?', search_Id_Value);
+  //return await returnAllUserInfo(search_Id_Value);
 }
 
 export async function getUserPosts(search_Id_Value: string) {
@@ -159,8 +160,16 @@ export async function responseToFriendRequest(myId: string, user_id: string, sta
 export async function addPost(DATA) {
   const isSet = await setPost(DATA);
   if ((isSet as any).affectedRows === 1) {
-    console.log((isSet as any).affectedRows[0]);
     return 'You have successfully added the post';
+  } else {
+    return false;
+  }
+}
+
+export async function saveMessage(DATA) {
+  const isSet = await saveMessageToDb(DATA);
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully send message';
   } else {
     return false;
   }
@@ -194,4 +203,8 @@ export async function returnAllUsers() {
 
 export async function getFriendStatusInfo(myId: string, userId: string, status: string) {
   return await findFriendStatusInfo(myId, userId, status);
+}
+
+export async function returnFriendsIfnfo(userId: string) {
+  return await returnFriends(userId);
 }

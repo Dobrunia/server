@@ -22,9 +22,11 @@ router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/get-user-posts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/getFriendStatusInfo/:myId/:userId/:status', checkHeader, userController.getFriendStatusInfo);
+router.get('/getAllFriendsIfnfo/:id', checkHeader, userController.getAllFriendsIfnfo);
 
 //messageController
 router.post('/addPost', multer.single('photo'), messageController.addPost);
+router.post('/saveMessage', checkHeader, messageController.saveMessage);
 
 //chatController
 router.get('/findChatByUserId/:id', checkHeader, chatController.findChatByUserId);

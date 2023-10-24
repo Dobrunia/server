@@ -14,6 +14,7 @@ import {
   responseToFriendRequest,
   deletePost,
   changePhoto,
+  returnFriendsIfnfo,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 
@@ -161,6 +162,11 @@ class UserController {
       request.params.status,
     );
     response.json(chat_id);
+  }
+
+  async getAllFriendsIfnfo(request, response, next) {
+    const chatId = await returnFriendsIfnfo(request.params.id);
+    response.json(chatId);
   }
 }
 

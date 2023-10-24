@@ -1,5 +1,6 @@
 import { Response } from '../types';
 import mysql, { RowDataPacket } from 'mysql2';
+import { UserInfo } from '../models/user';
 
 const poolSize = Number(
   process.env.NODE_ENV === 'production'
@@ -66,6 +67,18 @@ export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
+export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'INSERT INTO `messages`(`id`, `content`, `sendBy`, `chatID`, `datetime`) VALUES (NULL,?,?,?,?)',
+      [DATA.content, DATA.sendBy, DATA.chatId, DATA.datetime],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function findFriendStatusInfo( //TODO:: sql
   str_myId: string,
   str_user_id: string,
@@ -87,11 +100,10 @@ export async function findFriendStatusInfo( //TODO:: sql
   }
 }
 
-export async function addFriendStatusInfo(
+export async function addFriendStatusInfo( //TODO:: проверка что в бд есть уже такой запрос
   myId: string,
   friendId: string,
 ): Promise<mysql.RowDataPacket[]> {
-  //TODO:: проверка что в бд есть уже такой запрос
   try {
     const results = await conn.query<RowDataPacket[]>(
       'INSERT INTO `friends`(`friendship_id`, `user_id`, `friend_id`, `status`) VALUES (NULL,?,?,?)',
@@ -141,6 +153,45 @@ export async function removePost(
     const results = await conn.query<RowDataPacket[]>(
       'DELETE FROM `posts` WHERE `id` = ?',
       [postId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function returnAllUserInfo(search_Id_Value) {
+  //   const results = await conn.query<RowDataPacket[]>(
+  //     'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = 2 ORDER BY `datetime` ASC',
+  //     [search_Id_Value],
+  //   );
+  //   return results[0].map((u) => {
+  //     const user = new UserInfo();
+  //     user.id = u.id;
+  //     user.username = u.string;
+  //     user.email = u.string;
+  //     user.avatar = u.string;
+  //     user.permission = u.number;
+  //     user.isActivated = u.number;
+  //     user.user_id = u.number;
+  //     user.friend_id = u.number;
+  //     user.status = u.string;
+  //     return user;
+  //   });
+}
+
+export async function returnFriends(userId: string) {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'SELECT * FROM `users` WHERE `id` IN (' +
+        'SELECT CASE ' +
+        'WHEN `user_id` = ? THEN `friend_id` ' +
+        'ELSE `user_id` ' +
+        'END ' +
+        'FROM `friends` ' +
+        "WHERE `status` = 'accepted' AND (`user_id` = ? OR `friend_id` = ?)" +
+        ') AND `id` <> ?',
+      [userId, userId, userId, userId],
     );
     return results[0];
   } catch (ex) {
