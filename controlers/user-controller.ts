@@ -52,7 +52,7 @@ class UserController {
 
   async changeUsername(request, response, next) {
     const username = request.body.username;
-    const email = request.body.email;
+    const email = request.user.email;
     const res = await changeUsername(username, email);
     if (res) {
       response.json(username);
