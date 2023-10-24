@@ -17,16 +17,16 @@ export function initSocket(app, PORT) {
       userId: (socket as any).userId,
       chatId: (socket as any).chatId,
     });
-    console.log((socket as any).chatId);
+    // console.log((socket as any).chatId);
     socket.join((socket as any).chatId);//думаю тут нужно подключать не к майлу 'dobruniak@rambler.rulents@mail.ru' (socket as any).email
     socket.on('private message', ({ content, to }) => {
-      console.log(to);
+      //console.log(to);
       //TODO:: если чат не новый чатайди число, то просто сохраняем месседж в базу. Иначе создаем чат, добавляем обоих себеседников в чат и сохраняем месседж и после этого нужно пересоздать группу сокета с новым чатайди
       socket.to(to).emit('private message', {
         content,
         from: (socket as any).userId,
       });
-      console.log('первое получ сервером ' + (socket as any).userId + to);
+      //console.log('первое получ сервером ' + (socket as any).userId + to);
     });
   });
 

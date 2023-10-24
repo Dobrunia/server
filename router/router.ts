@@ -17,7 +17,7 @@ router.post('/deletePost', checkHeader, userController.deletePost);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
-router.get('/find-users', checkHeader, userController.findUsers);
+router.get('/findUserByName/:userName/:myId', checkHeader, userController.findUserByName);
 router.get('/find-user-by-id', checkHeader, userController.findUserById);
 router.get('/get-user-posts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
@@ -29,6 +29,9 @@ router.post('/addPost', multer.single('photo'), messageController.addPost);
 router.post('/saveMessage', checkHeader, messageController.saveMessage);
 
 //chatController
+router.post('/createNewChat', checkHeader, chatController.createNewChat);
+router.post('/writeNewUserInChat', checkHeader, chatController.writeNewUserInChat);
+
 router.get('/findChatByUserId/:id', checkHeader, chatController.findChatByUserId);
-router.get('/getMessagesByChatId/:chatID', checkHeader, chatController.getMessagesByChatId);
+router.get('/getMessagesByChatId/:chatId', checkHeader, chatController.getMessagesByChatId);
 router.get('/returnActiveChats/:id', checkHeader, chatController.returnAllUserChats);

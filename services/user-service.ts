@@ -1,13 +1,54 @@
 import { ApiError } from './../exceptions/api-error';
 import { ResultSetHeader } from 'mysql2';
-import { find, conn, set, setPost, findFriendStatusInfo, addFriendStatusInfo, removeFriendRequest, responseToFriend, removePost, returnAllUserInfo, returnFriends, saveMessageToDb } from './sqlwrapper';
+import {
+  find,
+  conn,
+  set,
+  setPost,
+  findFriendStatusInfo,
+  addFriendStatusInfo,
+  removeFriendRequest,
+  responseToFriend,
+  removePost,
+  returnAllUserInfo,
+  returnFriends,
+  saveMessageToDb,
+  findPrivateChatId,
+  returnAllPrivateChats,
+  returnUsersInChat,
+} from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
 import { JwtPayload } from 'jsonwebtoken';
 
-export async function findUsername(search_value: string) {
-  search_value = '%' + search_value + '%';
-  return await find(`users`, 'username LIKE ?', search_value);
+export async function findUserByName(DATA) {
+  DATA.userName = '%' + DATA.userName + '%';
+  const usersArray = await find(`users`, `username like ?`, DATA.userName);
+  const privateChatsArray = await returnAllPrivateChats();
+  for (const user of usersArray) {
+    for (const privateChat of privateChatsArray) {
+      const usersInChat = await returnUsersInChat(privateChat.id);
+      if (
+        (usersInChat[0].userID == DATA.myId ||
+          usersInChat[1].userID == DATA.myId) &&
+        (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
+      ) {
+        // if (DATA.myId == user.id) {
+        //   console.log('Это я');
+        //   user.chatId = null;
+        //   break;
+        // } else {
+        // console.log('Есть чат');
+        user.chatId = privateChat.id;
+        break;
+        // }
+      } else {
+        // console.log('Нет чата');
+        user.chatId = null;
+      }
+    }
+  }
+  return usersArray;
 }
 
 export async function findUserById(search_Id_Value: string) {
@@ -148,7 +189,11 @@ export async function deletePost(postId: string) {
   }
 }
 
-export async function responseToFriendRequest(myId: string, user_id: string, status: string) {
+export async function responseToFriendRequest(
+  myId: string,
+  user_id: string,
+  status: string,
+) {
   const isSet = await responseToFriend(myId, user_id, status);
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully request to user';
@@ -191,9 +236,15 @@ export async function refresh(refreshToken: string) {
       `email`,
       `'${user.email}'`,
     );
-    return { email: user.email, username: user.username, avatar: user.avatar, accessToken, refreshToken };
+    return {
+      email: user.email,
+      username: user.username,
+      avatar: user.avatar,
+      accessToken,
+      refreshToken,
+    };
   } else {
-    throw ApiError.UnauthorizedError()
+    throw ApiError.UnauthorizedError();
   }
 }
 
@@ -201,7 +252,11 @@ export async function returnAllUsers() {
   return await find(`users`);
 }
 
-export async function getFriendStatusInfo(myId: string, userId: string, status: string) {
+export async function getFriendStatusInfo(
+  myId: string,
+  userId: string,
+  status: string,
+) {
   return await findFriendStatusInfo(myId, userId, status);
 }
 

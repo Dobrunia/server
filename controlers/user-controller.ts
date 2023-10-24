@@ -1,5 +1,5 @@
 import {
-  findUsername,
+  findUserByName,
   saveUser,
   confirmEmail,
   authorization,
@@ -133,9 +133,12 @@ class UserController {
       );
     }
   }
-  async findUsers(request, response, next) {
-    const searchValue = request.query.search_value;
-    const users_response = await findUsername(searchValue);
+  async findUserByName(request, response, next) {
+    const DATA = {
+      userName: request.params.userName,
+      myId: request.params.myId,
+    };
+    const users_response = await findUserByName(DATA);
     response.json(users_response);
   }
   async findUserById(request, response, next) {

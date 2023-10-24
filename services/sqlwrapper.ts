@@ -35,6 +35,39 @@ export async function find(
   }
 }
 
+export async function returnAllPrivateChats(): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>('SELECT * FROM `chats` WHERE `isPrivate` = 1');
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function returnUsersInChat(chatId): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'SELECT * FROM `users_in_chats` WHERE `chatID` = ?',
+      [chatId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function findPrivateChatId(DATA): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      '',
+      [DATA.userName, DATA.myId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function set(
   tableName: string,
   setIn: string,

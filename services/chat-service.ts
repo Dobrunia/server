@@ -11,9 +11,25 @@ export async function returnChatId(userId, hostUserId) {
   return results[0];
 }
 
+export async function createNewChat(isPrivate) {
+  const results = await conn.query<RowDataPacket[]>(
+    'INSERT INTO `chats`(`id`, `name`, `isPrivate`) VALUES (NULL,NULL,?)',
+    [isPrivate],
+  );
+  return results[0];
+}
+
+export async function writeNewUserInChat(DATA) {
+  const results = await conn.query<RowDataPacket[]>(
+    'INSERT INTO `users_in_chats`(`userID`, `chatID`) VALUES (?,?)',
+    [DATA.userId, DATA.chatId],
+  );
+  return results[0];
+}
+
 export async function returnMessages(chatId) {
   const results = await conn.query<RowDataPacket[]>(
-    'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = 2 ORDER BY `datetime` ASC',
+    'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = ? ORDER BY `datetime` ASC',
     [chatId],
   );
   return results[0].map((u) => {
