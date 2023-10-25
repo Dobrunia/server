@@ -14,7 +14,7 @@ import {
   responseToFriendRequest,
   deletePost,
   changePhoto,
-  returnFriendsIfnfo,
+  getAllFriendsInfo,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 
@@ -60,16 +60,16 @@ class UserController {
   }
 
   async changePhoto(request, response, next) {
-    const userId = request.body.userId;
+    const myId = request.user.id;
     const photoUrl = request.body.photoUrl;
-    const res = await changePhoto(userId, photoUrl);
+    const res = await changePhoto(myId, photoUrl);
     if (res) {
       response.json(res);
     }
   }
 
   async addFriend(request, response, next) {
-    const myId = request.body.myId;
+    const myId = request.user.id;
     const friendId = request.body.friendId;
     const res = await addFriend(myId, friendId);
     if (res) {
@@ -78,7 +78,7 @@ class UserController {
   }
 
   async removeFriend(request, response, next) {
-    const myId = request.body.myId;
+    const myId = request.user.id;
     const friendId = request.body.friendId;
     const res = await removeFriend(myId, friendId);
     if (res) {
@@ -95,7 +95,7 @@ class UserController {
   }
 
   async responseToFriendRequest(request, response, next) {
-    const myId = request.body.myId;
+    const myId = request.user.id;
     const friend_id = request.body.friend_id;
     const status = request.body.status;
     const res = await responseToFriendRequest(myId, friend_id, status);
@@ -136,7 +136,7 @@ class UserController {
   async findUserByName(request, response, next) {
     const DATA = {
       userName: request.params.userName,
-      myId: request.params.myId,
+      myId: request.user.id,
     };
     const users_response = await findUserByName(DATA);
     response.json(users_response);
@@ -167,8 +167,8 @@ class UserController {
     response.json(chat_id);
   }
 
-  async getAllFriendsIfnfo(request, response, next) {
-    const chatId = await returnFriendsIfnfo(request.params.id);
+  async getAllFriendsInfo(request, response, next) {
+    const chatId = await getAllFriendsInfo(request.params.id);
     response.json(chatId);
   }
 }

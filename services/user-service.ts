@@ -118,6 +118,7 @@ export async function authorization(email: string, passwordHash: string) {
     throw Error('password invalid'); //password invalid;
   }
   const { accessToken, refreshToken } = generateJwtTokens({
+    id,
     email,
     username,
     avatar,
@@ -260,6 +261,6 @@ export async function getFriendStatusInfo(
   return await findFriendStatusInfo(myId, userId, status);
 }
 
-export async function returnFriendsIfnfo(userId: string) {
+export async function getAllFriendsInfo(userId: string) {
   return await returnFriends(userId);
 }

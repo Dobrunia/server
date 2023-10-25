@@ -2,9 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { router } from './router/router';
 import cookieParser from 'cookie-parser';
-import { errorHandler } from './middlewares/error';
+import { logErrors, clientErrorHandler, errorHandler } from './middlewares/error';
 import { initSocket } from './socket/socket';
 
+const SECRET_KEY = 'cookiesecret';
 const server = express();
 server.use(
   cors({
@@ -13,8 +14,10 @@ server.use(
   }),
 );
 server.use(express.json());
-server.use(cookieParser());
+server.use(cookieParser(SECRET_KEY));
 server.use('/api', router);
+server.use(logErrors);
+server.use(clientErrorHandler);
 server.use(errorHandler);
 const PORT = 5000;
 

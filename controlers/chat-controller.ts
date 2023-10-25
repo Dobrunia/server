@@ -8,7 +8,7 @@ import {
 
 class ChatController {
   async returnAllUserChats(request, response, next) {
-    const userId = request.params.id;
+    const userId = request.user.id;
     const chatsResponse = await returnAllUserChats(userId);
     response.json(chatsResponse);
   }
