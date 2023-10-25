@@ -15,6 +15,7 @@ import {
   deletePost,
   changePhoto,
   getAllFriendsInfo,
+  getFriendsRequestNotifications,
 } from '../services/user-service';
 import { emailVerification } from '../services/mail-service';
 
@@ -158,11 +159,14 @@ class UserController {
     const users_response = await returnAllUsers();
     response.json(users_response);
   }
+  async getNotifications(request, response, next) {
+    const users_response = await getFriendsRequestNotifications(request.user.id);
+    response.json(users_response);
+  }
   async getFriendStatusInfo(request, response, next) {
     const chat_id = await getFriendStatusInfo(
-      request.params.myId,
+      request.user.id,
       request.params.userId,
-      request.params.status,
     );
     response.json(chat_id);
   }

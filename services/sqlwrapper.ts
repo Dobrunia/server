@@ -37,14 +37,18 @@ export async function find(
 
 export async function returnAllPrivateChats(): Promise<mysql.RowDataPacket[]> {
   try {
-    const results = await conn.query<RowDataPacket[]>('SELECT * FROM `chats` WHERE `isPrivate` = 1');
+    const results = await conn.query<RowDataPacket[]>(
+      'SELECT * FROM `chats` WHERE `isPrivate` = 1',
+    );
     return results[0];
   } catch (ex) {
     console.log(ex);
   }
 }
 
-export async function returnUsersInChat(chatId): Promise<mysql.RowDataPacket[]> {
+export async function returnUsersInChat(
+  chatId,
+): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
       'SELECT * FROM `users_in_chats` WHERE `chatID` = ?',
@@ -58,10 +62,10 @@ export async function returnUsersInChat(chatId): Promise<mysql.RowDataPacket[]> 
 
 export async function findPrivateChatId(DATA): Promise<mysql.RowDataPacket[]> {
   try {
-    const results = await conn.query<RowDataPacket[]>(
-      '',
-      [DATA.userName, DATA.myId],
-    );
+    const results = await conn.query<RowDataPacket[]>('', [
+      DATA.userName,
+      DATA.myId,
+    ]);
     return results[0];
   } catch (ex) {
     console.log(ex);
@@ -112,21 +116,29 @@ export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
-export async function findFriendStatusInfo( //TODO:: sql
-  str_myId: string,
-  str_user_id: string,
-  str_status: string,
+export async function FriendsRequestNotifications(myId: string): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<mysql.RowDataPacket[]>(
+      `SELECT u.*, f.* FROM friends f JOIN users u ON f.user_id = u.id WHERE f.friend_id = ?`,
+      [myId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function findFriendStatusInfo(
+  myId: string,
+  userId: string,
 ): Promise<mysql.RowDataPacket[]> {
   try {
-    const user_id = str_myId.split('=')[1];
-    const friend_id = str_user_id.split('=')[1];
-    const status = str_status.split('=')[1];
-    const sql = `SELECT * FROM friends WHERE user_id = ${user_id} AND friend_id = ${friend_id} AND status = ${status}`;
-    // const results = await conn.query<mysql.RowDataPacket[]>(
-    //   `SELECT * FROM friends WHERE user_id = ? AND friend_id = ? AND status = ?`,
-    //   [user_id, friend_id, status], // userId=27 status=accepted
-    // );
-    const results = await conn.query<mysql.RowDataPacket[]>(sql);
+    //const sql = `SELECT * FROM friends WHERE user_id = ${myId} AND friend_id = ${userId}`;
+    //const results = await conn.query<mysql.RowDataPacket[]>(sql);
+    const results = await conn.query<mysql.RowDataPacket[]>(
+      `SELECT * FROM friends WHERE user_id = ? AND friend_id = ? OR user_id = ? AND friend_id = ?`,
+      [myId, userId, userId, myId],
+    );
     return results[0];
   } catch (ex) {
     console.log(ex);

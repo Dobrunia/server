@@ -16,6 +16,7 @@ import {
   findPrivateChatId,
   returnAllPrivateChats,
   returnUsersInChat,
+  FriendsRequestNotifications,
 } from './sqlwrapper';
 import { generateJwtTokens, validateRefreshToken } from './token-service';
 import { compareSync } from 'bcrypt-ts';
@@ -253,12 +254,12 @@ export async function returnAllUsers() {
   return await find(`users`);
 }
 
-export async function getFriendStatusInfo(
-  myId: string,
-  userId: string,
-  status: string,
-) {
-  return await findFriendStatusInfo(myId, userId, status);
+export async function getFriendsRequestNotifications(myId: string) {
+  return await FriendsRequestNotifications(myId);
+}
+
+export async function getFriendStatusInfo(myId: string, userId: string) {
+  return await findFriendStatusInfo(myId, userId);
 }
 
 export async function getAllFriendsInfo(userId: string) {
