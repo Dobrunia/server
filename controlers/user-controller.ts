@@ -28,7 +28,6 @@ class UserController {
     response.cookie('refreshToken', userData.refreshToken, { httpOnly: true });
     response.json(userData);
   }
-
   async registration(request, response, next) {
     const DATA = {
       username: request.body.username,
@@ -44,13 +43,17 @@ class UserController {
     }
     response.json(userID);
   }
-
   async refresh(request, response, next) {
-    const { refreshToken } = request.cookies;
-    let result = await refresh(refreshToken);
-    response.json(result);
+    try{
+      const { refreshToken } = request.cookies;
+      let result = await refresh(refreshToken);
+      response.json(result);
+    }
+    catch(error){
+      next(error);
+    }
+    
   }
-
   async changeUsername(request, response, next) {
     const username = request.body.username;
     const email = request.user.email;
@@ -59,7 +62,6 @@ class UserController {
       response.json(username);
     }
   }
-
   async changePhoto(request, response, next) {
     const myId = request.user.id;
     const photoUrl = request.body.photoUrl;
@@ -68,7 +70,6 @@ class UserController {
       response.json(res);
     }
   }
-
   async addFriend(request, response, next) {
     const myId = request.user.id;
     const friendId = request.body.friendId;
@@ -77,7 +78,6 @@ class UserController {
       response.json(res);
     }
   }
-
   async removeFriend(request, response, next) {
     const myId = request.user.id;
     const friendId = request.body.friendId;
@@ -86,7 +86,6 @@ class UserController {
       response.json(res);
     }
   }
-
   async deletePost(request, response, next) {
     const postId = request.body.postId;
     const res = await deletePost(postId);
@@ -94,7 +93,6 @@ class UserController {
       response.json(res);
     }
   }
-
   async responseToFriendRequest(request, response, next) {
     const myId = request.user.id;
     const friend_id = request.body.friend_id;
@@ -104,7 +102,6 @@ class UserController {
       response.json(res);
     }
   }
-
   async verification(request, response, next) {
     if (request.params.link) {
       const data = {
@@ -143,8 +140,11 @@ class UserController {
     response.json(users_response);
   }
   async findUserById(request, response, next) {
-    const search_Id_Value = request.query.search_value;
-    const users_response = await findUserById(search_Id_Value);
+    const DATA = {
+      search_value: request.query.search_value,
+      myId: request.user.id,
+    };
+    const users_response = await findUserById(DATA);
     response.json(users_response);
   }
   async getUserPosts(request, response, next) {
@@ -160,7 +160,9 @@ class UserController {
     response.json(users_response);
   }
   async getNotifications(request, response, next) {
-    const users_response = await getFriendsRequestNotifications(request.user.id);
+    const users_response = await getFriendsRequestNotifications(
+      request.user.id,
+    );
     response.json(users_response);
   }
   async getFriendStatusInfo(request, response, next) {
@@ -170,7 +172,6 @@ class UserController {
     );
     response.json(chat_id);
   }
-
   async getAllFriendsInfo(request, response, next) {
     const chatId = await getAllFriendsInfo(request.params.id);
     response.json(chatId);

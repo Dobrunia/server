@@ -19,8 +19,9 @@ class ChatController {
   }
 
   async writeNewUserInChat(request, response, next) {
+    //TODO:: проверить
     const DATA = {
-      userId: request.body.userId,
+      userId: request.body.userId ? request.body.userId : request.user.id,
       chatId: request.body.chatId,
     };
     const isPrivate = await writeNewUserInChat(DATA);

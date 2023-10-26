@@ -7,9 +7,9 @@ export function logErrors (err, req, res, next) {
 
 export function clientErrorHandler (err, req, res, next) {
   if (err instanceof ApiError) {
-    return res
+    return next(res
       .status(err.status)
-      .json({ message: err.message, errors: err.errors });
+      .json({ message: err.message, errors: err.errors }));
   } else {
     next(err)
   }

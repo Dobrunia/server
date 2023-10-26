@@ -13,7 +13,7 @@ class MessageController {
   async addPost(request, response, next) {
     const DATA = {
       wallId: request.body.wallId,
-      authorId: request.body.authorId,
+      authorId: request.user.id,
       text: request.body.postText ? request.body.postText : '',
       photos: request.file ? request.file.buffer : '',
     };
@@ -30,6 +30,7 @@ class MessageController {
       datetime: request.body.message.datetime,
       sendBy: request.body.message.sendBy,
     };
+    console.log(DATA)
     const res = await saveMessage(DATA);
     if (res) {
       response.json(res);

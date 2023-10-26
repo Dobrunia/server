@@ -52,9 +52,25 @@ export async function findUserByName(DATA) {
   return usersArray;
 }
 
-export async function findUserById(search_Id_Value: string) {
-  return await find(`users`, 'id LIKE ?', search_Id_Value);
-  //return await returnAllUserInfo(search_Id_Value);
+export async function findUserById(DATA) {
+  const usersArray = await find(`users`, 'id LIKE ?', DATA.search_value);
+  const privateChatsArray = await returnAllPrivateChats();
+  for (const user of usersArray) {
+    for (const privateChat of privateChatsArray) {
+      const usersInChat = await returnUsersInChat(privateChat.id);
+      if (
+        (usersInChat[0].userID == DATA.myId ||
+          usersInChat[1].userID == DATA.myId) &&
+        (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
+      ) {
+        user.chatId = privateChat.id;
+        break;
+      } else {
+        user.chatId = null;
+      }
+    }
+  }
+  return usersArray;
 }
 
 export async function getUserPosts(search_Id_Value: string) {

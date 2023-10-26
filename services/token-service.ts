@@ -11,7 +11,7 @@ export function generateJwtTokens(payload) {
 }
 
 export function generateAccessToken(payload) {
-  const accessToken = jwt.sign(payload, privateAccessKey, { expiresIn: '3h' });
+  const accessToken = jwt.sign(payload, privateAccessKey, { expiresIn: '1m' });
   return accessToken;
 }
 export function generateRefreshToken(payload) {

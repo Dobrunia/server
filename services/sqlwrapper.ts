@@ -17,6 +17,10 @@ export const conn = mysql
   })
   .promise();
 
+setInterval(() => {
+  conn.query('select 1');
+}, 240000);
+
 export async function find(
   tableName: string,
   searchClause?: string,
@@ -116,7 +120,9 @@ export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
-export async function FriendsRequestNotifications(myId: string): Promise<mysql.RowDataPacket[]> {
+export async function FriendsRequestNotifications(
+  myId: string,
+): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<mysql.RowDataPacket[]>(
       `SELECT u.*, f.* FROM friends f JOIN users u ON f.user_id = u.id WHERE f.friend_id = ?`,
@@ -166,8 +172,8 @@ export async function removeFriendRequest(
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      'DELETE FROM `friends` WHERE `user_id` = ? AND `friend_id` = ? AND `status` = ?',
-      [user_id, friend_id, `accepted`],
+      'DELETE FROM `friends` WHERE `user_id` = ? AND `friend_id` = ? AND `status` = ? OR `user_id` = ? AND `friend_id` = ? AND `status` = ?',
+      [user_id, friend_id, `accepted`, friend_id, user_id, `accepted`],
     );
     return results[0];
   } catch (ex) {
@@ -184,6 +190,9 @@ export async function responseToFriend(
     const results = await conn.query<RowDataPacket[]>(
       'UPDATE `friends` SET `status`=? WHERE `user_id`=? AND `friend_id`=?',
       [status, user_id, myId],
+    );
+    const ttt = await conn.query<RowDataPacket[]>(
+      "DELETE FROM friends WHERE status = 'rejected'",
     );
     return results[0];
   } catch (ex) {
