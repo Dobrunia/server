@@ -240,7 +240,7 @@ export async function saveMessage(DATA) {
 
 export async function refresh(refreshToken: string) {
   const userData = validateRefreshToken(refreshToken) as JwtPayload;
-  const user = findUserByEmail(userData.email) as any;
+  const user = await findUserByEmail(userData.email) as any;
   if (user.refreshToken) {
     const { accessToken, refreshToken } = generateJwtTokens({
       email: user.email,
