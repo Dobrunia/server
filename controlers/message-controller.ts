@@ -11,29 +11,37 @@ export const multer = Multer({
 
 class MessageController {
   async addPost(request, response, next) {
-    const DATA = {
-      wallId: request.body.wallId,
-      authorId: request.user.id,
-      text: request.body.postText ? request.body.postText : '',
-      photos: request.file ? request.file.buffer : '',
-    };
-    const res = await addPost(DATA);
-    if (res) {
-      response.json(res);
+    try {
+      const DATA = {
+        wallId: request.body.wallId,
+        authorId: request.user.id,
+        text: request.body.postText ? request.body.postText : '',
+        photos: request.file ? request.file.buffer : '',
+      };
+      const res = await addPost(DATA);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
 
   async saveMessage(request, response, next) {
-    const DATA = {
-      chatId: request.body.message.chatId,
-      content: request.body.message.content,
-      datetime: request.body.message.datetime,
-      sendBy: request.body.message.sendBy,
-    };
-    console.log(DATA)
-    const res = await saveMessage(DATA);
-    if (res) {
-      response.json(res);
+    try {
+      const DATA = {
+        chatId: request.body.message.chatId,
+        content: request.body.message.content,
+        datetime: request.body.message.datetime,
+        sendBy: request.body.message.sendBy,
+      };
+      console.log(DATA);
+      const res = await saveMessage(DATA);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
 }

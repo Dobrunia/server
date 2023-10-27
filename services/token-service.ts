@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
-const privateAccessKey = 'Dobrunia';
-const privateRefreshKey = 'Kostrigin';
+const privateAccessKey = process.env.TOKEN_PRIVATE_ACCESS_KEY;
+const privateRefreshKey = process.env.TOKEN_PRIVATE_REFRESH_KEY;
 
 export function generateJwtTokens(payload) {
   return {

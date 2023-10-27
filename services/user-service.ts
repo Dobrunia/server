@@ -79,8 +79,7 @@ export async function getUserPosts(search_Id_Value: string) {
 
 export async function findUserByEmail(email: string) {
   const users = await find(`users`, '`email` = ?', email);
-  if (users.length <= 0) {
-    //TODO:: падает .length <= 0
+  if (!users) {
     throw Error('User not found');
   }
   return users[0];
@@ -125,13 +124,13 @@ export async function confirmEmail(id: number) {
   }
 }
 
-export async function authorization(email: string, passwordHash: string) {
+export async function authorization(email: string, password: string) {
   const user = await findUserByEmail(email);
   const id = user.id;
   const hash = user.password;
   const username = user.username;
   const avatar = user.avatar;
-  if (compareSync(hash, passwordHash)) {
+  if (!compareSync(password, hash)) {
     throw Error('password invalid'); //password invalid;
   }
   const { accessToken, refreshToken } = generateJwtTokens({

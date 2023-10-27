@@ -21,160 +21,233 @@ import { emailVerification } from '../services/mail-service';
 
 class UserController {
   async authorization(request, response, next) {
-    const userData = await authorization(
-      request.body.email,
-      request.body.passwordHash,
-    );
-    response.cookie('refreshToken', userData.refreshToken, { httpOnly: true });
-    response.json(userData);
+    try {
+      const userData = await authorization(
+        request.body.email,
+        request.body.password,
+      );
+      response.cookie('refreshToken', userData.refreshToken, {
+        httpOnly: true,
+      });
+      response.json(userData);
+    } catch (error) {
+      next(error);
+    }
   }
   async registration(request, response, next) {
-    const DATA = {
-      username: request.body.username,
-      email: request.body.email,
-      passwordHash: request.body.password,
-    };
-    const userID = await saveUser(DATA.username, DATA.email, DATA.passwordHash);
-    if (userID) {
-      await emailVerification(
+    try {
+      const DATA = {
+        username: request.body.username,
+        email: request.body.email,
+        passwordHash: request.body.password,
+      };
+      const userID = await saveUser(
+        DATA.username,
         DATA.email,
-        `http://localhost:5000/api/emailverification/${userID}`,
+        DATA.passwordHash,
       );
+      if (userID) {
+        try{
+          await emailVerification(
+            DATA.email,
+            `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/api/emailverification/${userID}`,
+          );
+        }
+        catch (error) {
+          //TODO:: retry
+        }
+      }
+      response.json(userID);
+    } catch (error) {
+      next(error);
     }
-    response.json(userID);
   }
   async refresh(request, response, next) {
-    try{
+    try {
       const { refreshToken } = request.cookies;
       let result = await refresh(refreshToken);
       response.json(result);
-    }
-    catch(error){
+    } catch (error) {
       next(error);
     }
-    
   }
   async changeUsername(request, response, next) {
-    const username = request.body.username;
-    const email = request.user.email;
-    const res = await changeUsername(username, email);
-    if (res) {
-      response.json(username);
+    try {
+      const username = request.body.username;
+      const email = request.user.email;
+      const res = await changeUsername(username, email);
+      if (res) {
+        response.json(username);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async changePhoto(request, response, next) {
-    const myId = request.user.id;
-    const photoUrl = request.body.photoUrl;
-    const res = await changePhoto(myId, photoUrl);
-    if (res) {
-      response.json(res);
+    try {
+      const myId = request.user.id;
+      const photoUrl = request.body.photoUrl;
+      const res = await changePhoto(myId, photoUrl);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async addFriend(request, response, next) {
-    const myId = request.user.id;
-    const friendId = request.body.friendId;
-    const res = await addFriend(myId, friendId);
-    if (res) {
-      response.json(res);
+    try {
+      const myId = request.user.id;
+      const friendId = request.body.friendId;
+      const res = await addFriend(myId, friendId);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async removeFriend(request, response, next) {
-    const myId = request.user.id;
-    const friendId = request.body.friendId;
-    const res = await removeFriend(myId, friendId);
-    if (res) {
-      response.json(res);
+    try {
+      const myId = request.user.id;
+      const friendId = request.body.friendId;
+      const res = await removeFriend(myId, friendId);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async deletePost(request, response, next) {
-    const postId = request.body.postId;
-    const res = await deletePost(postId);
-    if (res) {
-      response.json(res);
+    try {
+      const postId = request.body.postId;
+      const res = await deletePost(postId);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async responseToFriendRequest(request, response, next) {
-    const myId = request.user.id;
-    const friend_id = request.body.friend_id;
-    const status = request.body.status;
-    const res = await responseToFriendRequest(myId, friend_id, status);
-    if (res) {
-      response.json(res);
+    try {
+      const myId = request.user.id;
+      const friend_id = request.body.friend_id;
+      const status = request.body.status;
+      const res = await responseToFriendRequest(myId, friend_id, status);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async verification(request, response, next) {
-    if (request.params.link) {
-      const data = {
-        title: 'Email Verification',
-        message: '',
-      };
-      data.message = await confirmEmail(request.params.link);
-      // ejs.renderFile('./views/verification.ejs', data, function (err, html) {
-      //   if (err) {
-      //     console.log(err);
-      //     response.status(500).send('Internal Server Error');
-      //   } else {
-      //     return response.send(html);
-      //   }
-      // });
-      return response.send(
-        `<div
-      style="
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: vh;
-      "
-    ><h1>${data.title}</h1><h2>${data.message}</h2></div>`,
-      );
+    try {
+      if (request.params.link) {
+        const data = {
+          title: 'Email Verification',
+          message: '',
+        };
+        data.message = await confirmEmail(request.params.link);
+        // ejs.renderFile('./views/verification.ejs', data, function (err, html) {
+        //   if (err) {
+        //     console.log(err);
+        //     response.status(500).send('Internal Server Error');
+        //   } else {
+        //     return response.send(html);
+        //   }
+        // });
+        return response.send(
+          `<div
+        style="
+          display: flex;
+          flex-flow: column nowrap;
+          align-items: center;
+          justify-content: center;
+          width: 100vw;
+          height: vh;
+        "
+      ><h1>${data.title}</h1><h2>${data.message}</h2></div>`,
+        );
+      }
+    } catch (error) {
+      next(error);
     }
   }
   async findUserByName(request, response, next) {
-    const DATA = {
-      userName: request.params.userName,
-      myId: request.user.id,
-    };
-    const users_response = await findUserByName(DATA);
-    response.json(users_response);
+    try {
+      const DATA = {
+        userName: request.params.userName,
+        myId: request.user.id,
+      };
+      const users_response = await findUserByName(DATA);
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
   }
   async findUserById(request, response, next) {
-    const DATA = {
-      search_value: request.query.search_value,
-      myId: request.user.id,
-    };
-    const users_response = await findUserById(DATA);
-    response.json(users_response);
+    try {
+      const DATA = {
+        search_value: request.query.search_value,
+        myId: request.user.id,
+      };
+      const users_response = await findUserById(DATA);
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
   }
   async getUserPosts(request, response, next) {
-    const search_Id_Value = request.query.search_value;
-    const users_response = await getUserPosts(search_Id_Value);
-    users_response.forEach((u) => {
-      u.photosString = u.photos.toString('base64');
-    });
-    response.json(users_response);
+    try {
+      const search_Id_Value = request.query.search_value;
+      const users_response = await getUserPosts(search_Id_Value);
+      users_response.forEach((u) => {
+        u.photosString = u.photos.toString('base64');
+      });
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
   }
   async returnAllUsers(request, response, next) {
-    const users_response = await returnAllUsers();
-    response.json(users_response);
+    try {
+      const users_response = await returnAllUsers();
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
   }
   async getNotifications(request, response, next) {
-    const users_response = await getFriendsRequestNotifications(
-      request.user.id,
-    );
-    response.json(users_response);
+    try {
+      const users_response = await getFriendsRequestNotifications(
+        request.user.id,
+      );
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
   }
   async getFriendStatusInfo(request, response, next) {
-    const chat_id = await getFriendStatusInfo(
-      request.user.id,
-      request.params.userId,
-    );
-    response.json(chat_id);
+    try {
+      const chat_id = await getFriendStatusInfo(
+        request.user.id,
+        request.params.userId,
+      );
+      response.json(chat_id);
+    } catch (error) {
+      next(error);
+    }
   }
   async getAllFriendsInfo(request, response, next) {
-    const chatId = await getAllFriendsInfo(request.params.id);
-    response.json(chatId);
+    try {
+      const chatId = await getAllFriendsInfo(request.params.id);
+      response.json(chatId);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

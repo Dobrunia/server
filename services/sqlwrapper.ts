@@ -1,6 +1,7 @@
 import { Response } from '../types';
 import mysql, { RowDataPacket } from 'mysql2';
 import { UserInfo } from '../models/user';
+import 'dotenv/config';
 
 const poolSize = Number(
   process.env.NODE_ENV === 'production'
@@ -10,10 +11,10 @@ const poolSize = Number(
 export const conn = mysql
   .createPool({
     connectionLimit: poolSize,
-    host: '94.130.167.163',
-    user: 'dobru783_user',
-    database: 'dobru783_websocketchat',
-    password: 'Dobrunia123',
+    host: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    database: process.env.SQL_DATABASE,
+    password: process.env.SQL_PASSWORD,
   })
   .promise();
 
@@ -27,6 +28,7 @@ export async function find(
   args?,
 ): Promise<mysql.RowDataPacket[]> {
   try {
+
     const results = searchClause
       ? await conn.query<RowDataPacket[]>(
           `SELECT * FROM ${tableName} WHERE ${searchClause}`,

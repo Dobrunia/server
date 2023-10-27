@@ -8,37 +8,57 @@ import {
 
 class ChatController {
   async returnAllUserChats(request, response, next) {
-    const userId = request.user.id;
-    const chatsResponse = await returnAllUserChats(userId);
-    response.json(chatsResponse);
+    try {
+      const userId = request.user.id;
+      const chatsResponse = await returnAllUserChats(userId);
+      response.json(chatsResponse);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async createNewChat(request, response, next) {
-    const isPrivate = await createNewChat(request.body.isPrivate);
-    response.json(isPrivate);
+    try {
+      const isPrivate = await createNewChat(request.body.isPrivate);
+      response.json(isPrivate);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async writeNewUserInChat(request, response, next) {
     //TODO:: проверить
-    const DATA = {
-      userId: request.body.userId ? request.body.userId : request.user.id,
-      chatId: request.body.chatId,
-    };
-    const isPrivate = await writeNewUserInChat(DATA);
-    response.json(isPrivate);
+    try {
+      const DATA = {
+        userId: request.body.userId ? request.body.userId : request.user.id,
+        chatId: request.body.chatId,
+      };
+      const isPrivate = await writeNewUserInChat(DATA);
+      response.json(isPrivate);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async getMessagesByChatId(request, response, next) {
-    const result = await returnMessages(request.params.chatId);
-    response.json(result);
+    try {
+      const result = await returnMessages(request.params.chatId);
+      response.json(result);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async findChatByUserId(request, response, next) {
-    const chatId = await returnChatId(
-      request.params.id,
-      request.params.hostUserId,
-    );
-    response.json(chatId);
+    try {
+      const chatId = await returnChatId(
+        request.params.id,
+        request.params.hostUserId,
+      );
+      response.json(chatId);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

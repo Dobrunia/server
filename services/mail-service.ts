@@ -1,21 +1,23 @@
 import nodemailer from 'nodemailer';
+import 'dotenv/config';
 
 const transporter = nodemailer.createTransport({
-  host: 'mail.gigachat.ru',
+  host: process.env.MAIL_HOST,
   port: 465,
   secure: true,
   auth: {
-    user: 'gigachat@gigachat.ru',
-    pass: 'Dobrunia1',
+    user: process.env.MAIL_AUTH_USER,
+    pass: process.env.MAIL_AUTH_PASS,
   },
   tls: {
     rejectUnauthorized: false,
   },
 });
 
-const from = 'gigachat@gigachat.ru';
+const from = process.env.MAIL_AUTH_USER;
 
 export async function emailVerification(to: string, activationLink: string) {
+  console.log(transporter, from)
   const info = await transporter.sendMail({
     from,
     to, // list of receivers
@@ -23,5 +25,5 @@ export async function emailVerification(to: string, activationLink: string) {
     text: 'Для подтверждения почты нажмите на кнопку. Click the button to confirm your email.', // plain text body
     html: `<a href=${activationLink}>Click me</a>`, // html body
   });
-  console.log('Message sent: %s', info.messageId);
+  //console.log('Message sent: %s', info.messageId);
 }
