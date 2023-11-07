@@ -16,4 +16,3 @@ jobs:
       with:
         node-version: 21.x
     - run: npm install
-    - run: pm2 restart app-name
