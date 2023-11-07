@@ -1,4 +1,4 @@
-import { ApiError } from './../exceptions/api-error';
+import { ApiError } from './../exceptions/api-error.js';
 import { ResultSetHeader } from 'mysql2';
 import {
   find,
@@ -17,9 +17,9 @@ import {
   returnAllPrivateChats,
   returnUsersInChat,
   FriendsRequestNotifications,
-} from './sqlwrapper';
-import { generateJwtTokens, validateRefreshToken } from './token-service';
-import { compareSync } from 'bcrypt-ts';
+} from './sqlwrapper.js';
+import { generateJwtTokens, validateRefreshToken } from './token-service.js';
+import bcrypt from 'bcryptjs';
 import { JwtPayload } from 'jsonwebtoken';
 
 export async function findUserByName(DATA) {
@@ -130,7 +130,7 @@ export async function authorization(email: string, password: string) {
   const hash = user.password;
   const username = user.username;
   const avatar = user.avatar;
-  if (!compareSync(password, hash)) {
+  if (!bcrypt.compareSync(password, hash)) {
     throw Error('password invalid'); //password invalid;
   }
   const { accessToken, refreshToken } = generateJwtTokens({

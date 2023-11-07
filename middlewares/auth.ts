@@ -1,5 +1,5 @@
-import { ApiError } from './../exceptions/api-error';
-import { validateAccessToken } from './../services/token-service';
+import { ApiError } from './../exceptions/api-error.js';
+import { validateAccessToken } from './../services/token-service.js';
 
 export async function checkHeader(request, response, next) {
   const authorizationHeader = request.headers.authorization;

@@ -1,6 +1,4 @@
-import { Response } from '../types';
 import mysql, { RowDataPacket } from 'mysql2';
-import { UserInfo } from '../models/user';
 import 'dotenv/config';
 
 const poolSize = Number(

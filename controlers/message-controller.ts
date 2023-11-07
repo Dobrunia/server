@@ -1,4 +1,4 @@
-import { addPost, saveMessage } from '../services/user-service';
+import { addPost, saveMessage } from '../services/user-service.js';
 
 import Multer from 'multer';
 

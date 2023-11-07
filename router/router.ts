@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { userController } from '../controlers/user-controller';
-import { chatController } from '../controlers/chat-controller';
-import { messageController, multer } from '../controlers/message-controller';
-import { checkHeader } from '../middlewares/auth';
-import { verifyAccount } from '../middlewares/permission';
+import { userController } from '../controlers/user-controller.js';
+import { chatController } from '../controlers/chat-controller.js';
+import { messageController, multer } from '../controlers/message-controller.js';
+import { checkHeader } from '../middlewares/auth.js';
 
 export const router = Router();
 //userController

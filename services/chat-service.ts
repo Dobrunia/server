@@ -1,7 +1,7 @@
 import { RowDataPacket } from 'mysql2';
-import { conn } from './sqlwrapper';
-import { Chat } from '../models/chat';
-import { Message } from '../models/message';
+import { conn } from './sqlwrapper.js';
+import { Chat } from '../models/chat.js';
+import { Message } from '../models/message.js';
 
 export async function returnChatId(userId, hostUserId) {
   const results = await conn.query<RowDataPacket[]>(

@@ -4,7 +4,7 @@ import {
   returnChatId,
   returnMessages,
   writeNewUserInChat,
-} from '../services/chat-service';
+} from '../services/chat-service.js';
 
 class ChatController {
   async returnAllUserChats(request, response, next) {

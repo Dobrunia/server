@@ -1,16 +1,17 @@
+import dotenv from 'dotenv';
+dotenv.config({path: '.env.production'});
 import express from 'express';
 import cors from 'cors';
-import { router } from './router/router';
+import { router } from './router/router.js';
 import cookieParser from 'cookie-parser';
-import { logErrors, clientErrorHandler, errorHandler } from './middlewares/error';
-import { initSocket } from './socket/socket';
-import 'dotenv/config';
+import { logErrors, clientErrorHandler, errorHandler } from './middlewares/error.js';
+import { initSocket } from './socket/socket.js';
 
 const server = express();
 server.use(
   cors({
     credentials: true,
-    origin: `${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
+    origin: process.env.CORS_ORIGIN,
   }),
 );
 server.use(express.json());

@@ -16,8 +16,8 @@ import {
   changePhoto,
   getAllFriendsInfo,
   getFriendsRequestNotifications,
-} from '../services/user-service';
-import { emailVerification } from '../services/mail-service';
+} from '../services/user-service.js';
+import { emailVerification } from '../services/mail-service.js';
 
 class UserController {
   async authorization(request, response, next) {
