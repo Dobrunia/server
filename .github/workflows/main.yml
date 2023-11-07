@@ -16,4 +16,5 @@ jobs:
       with:
         node-version: 21.x
     - run: npm install
+    - run: rm -r /home/c81967/memessenger.na4u.ru/app/dist
     - run: cp -r /home/c81967/memessenger.na4u.ru/actions-runner/cicd/server/server/dist /home/c81967/memessenger.na4u.ru/app
