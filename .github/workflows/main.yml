@@ -16,3 +16,4 @@ jobs:
       with:
         node-version: 21.x
     - run: npm install
+    - run: cp -r source_folder /home/c81967/memessenger.na4u.ru/app
