@@ -1,12 +1,12 @@
 import { Server } from 'socket.io';
 import * as http from 'http';
-import 'dotenv/config';
+import {config} from '../config.js';
 
-export function initSocket(app, PORT) {
+export function initSocket(app) {
   const server = http.createServer(app);
   const io = new Server(server, {
     cors: {
-      origin: [process.env.CORS_ORIGIN],
+      origin: [config.cors],
     },
   });
   io.on('connection', (socket) => {
@@ -33,7 +33,7 @@ export function initSocket(app, PORT) {
     (socket as any).chatId = chatId;
     next();
   });
-  server.listen(PORT, () => {
-    console.log('Server running on Port ', PORT);
+  server.listen(config.port, () => {
+    console.log('Server running on Port ', config.port);
   });
 }

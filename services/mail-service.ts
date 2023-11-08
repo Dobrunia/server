@@ -1,20 +1,20 @@
 import nodemailer from 'nodemailer';
-import 'dotenv/config';
+import {config} from '../config.js';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_HOST,
+  host: config.mail.host,
   port: 465,
   secure: true,
   auth: {
-    user: process.env.MAIL_AUTH_USER,
-    pass: process.env.MAIL_AUTH_PASS,
+    user: config.mail.user,
+    pass: config.mail.pass,
   },
   tls: {
     rejectUnauthorized: false,
   },
 });
 
-const from = process.env.MAIL_AUTH_USER;
+const from = config.mail.user;
 
 export async function emailVerification(to: string, activationLink: string) {
   console.log(transporter, from)

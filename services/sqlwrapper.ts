@@ -1,18 +1,18 @@
 import mysql, { RowDataPacket } from 'mysql2';
-import 'dotenv/config';
+import {config} from '../config.js';
 
 const poolSize = Number(
-  process.env.NODE_ENV === 'production'
-    ? process.env.MAX_CONN_POOLSIZE || 10
+  config.env === 'production'
+    ? config.db.poolSize || 10
     : 20,
 );
 export const conn = mysql
   .createPool({
     connectionLimit: poolSize,
-    host: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    database: process.env.SQL_DATABASE,
-    password: process.env.SQL_PASSWORD,
+    host: config.db.host,
+    user: config.db.user,
+    database: config.db.database,
+    password: config.db.pass,
   })
   .promise();
 

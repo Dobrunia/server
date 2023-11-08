@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-import 'dotenv/config';
+import {config} from '../config.js';
 
-const privateAccessKey = process.env.TOKEN_PRIVATE_ACCESS_KEY;
-const privateRefreshKey = process.env.TOKEN_PRIVATE_REFRESH_KEY;
+const privateAccessKey = config.accessKey;
+const privateRefreshKey = config.refreshKey;
 
 export function generateJwtTokens(payload) {
   return {

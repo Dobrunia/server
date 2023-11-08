@@ -18,6 +18,7 @@ import {
   getFriendsRequestNotifications,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
+import {config} from '../config.js';
 
 class UserController {
   async authorization(request, response, next) {
@@ -50,7 +51,7 @@ class UserController {
         try{
           await emailVerification(
             DATA.email,
-            `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/api/emailverification/${userID}`,
+            `${config.serverUrl}/api/emailverification/${userID}`,
           );
         }
         catch (error) {
