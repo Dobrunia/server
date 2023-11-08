@@ -10,13 +10,13 @@ import {
   removeFriendRequest,
   responseToFriend,
   removePost,
-  returnAllUserInfo,
   returnFriends,
   saveMessageToDb,
   findPrivateChatId,
   returnAllPrivateChats,
   returnUsersInChat,
   FriendsRequestNotifications,
+  returnAllUserPost,
 } from './sqlwrapper.js';
 import { generateJwtTokens, validateRefreshToken } from './token-service.js';
 import bcrypt from 'bcryptjs';
@@ -74,7 +74,7 @@ export async function findUserById(DATA) {
 }
 
 export async function getUserPosts(search_Id_Value: string) {
-  return await find(`posts`, 'wallId LIKE ?', search_Id_Value);
+  return await returnAllUserPost(search_Id_Value);
 }
 
 export async function findUserByEmail(email: string) {

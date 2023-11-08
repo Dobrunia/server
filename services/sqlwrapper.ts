@@ -1,10 +1,8 @@
 import mysql, { RowDataPacket } from 'mysql2';
-import {config} from '../config.js';
+import { config } from '../config.js';
 
 const poolSize = Number(
-  config.env === 'production'
-    ? config.db.poolSize || 10
-    : 20,
+  config.env === 'production' ? config.db.poolSize || 10 : 20,
 );
 export const conn = mysql
   .createPool({
@@ -26,7 +24,6 @@ export async function find(
   args?,
 ): Promise<mysql.RowDataPacket[]> {
   try {
-
     const results = searchClause
       ? await conn.query<RowDataPacket[]>(
           `SELECT * FROM ${tableName} WHERE ${searchClause}`,
@@ -214,24 +211,21 @@ export async function removePost(
   }
 }
 
-export async function returnAllUserInfo(search_Id_Value) {
-  //   const results = await conn.query<RowDataPacket[]>(
-  //     'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = 2 ORDER BY `datetime` ASC',
-  //     [search_Id_Value],
-  //   );
-  //   return results[0].map((u) => {
-  //     const user = new UserInfo();
-  //     user.id = u.id;
-  //     user.username = u.string;
-  //     user.email = u.string;
-  //     user.avatar = u.string;
-  //     user.permission = u.number;
-  //     user.isActivated = u.number;
-  //     user.user_id = u.number;
-  //     user.friend_id = u.number;
-  //     user.status = u.string;
-  //     return user;
-  //   });
+export async function returnAllUserPost(
+  wallId,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      `SELECT posts.id AS postsid, posts.wallId, posts.authorId, posts.text, posts.photos, posts.files, users.*
+      FROM posts
+      JOIN users ON posts.authorId = users.id
+      WHERE posts.wallId LIKE ?`,
+      [wallId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
 }
 
 export async function returnFriends(userId: string) {
