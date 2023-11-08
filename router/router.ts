@@ -17,7 +17,7 @@ router.post('/deletePost', checkHeader, userController.deletePost);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
-// router.get('/findUserByName/:userName', checkHeader, userController.findUserByName);
+router.get('/findUserByName/:userName', checkHeader, userController.findUserByName);
 router.get('/findUserById', checkHeader, userController.findUserById);
 router.get('/getUserPosts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
