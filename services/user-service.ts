@@ -192,7 +192,7 @@ export async function changeUserInfo(
     `'${infoType}'`,
     `${value}`,
     `id`,
-    `'${userId}'`,
+    `${userId}`,
   );
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully changed your info';
