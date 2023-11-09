@@ -10,6 +10,7 @@ router.post('/authorization', userController.authorization);
 router.post('/registration', userController.registration);
 router.post('/changeUsername', checkHeader, userController.changeUsername);
 router.post('/changePhoto', checkHeader, userController.changePhoto);
+router.post('/changeUserInfo', checkHeader, userController.changeUserInfo);
 router.post('/addFriend', checkHeader, userController.addFriend);
 router.post('/responseToFriendRequest', checkHeader, userController.responseToFriendRequest);
 router.post('/removeFriend', checkHeader, userController.removeFriend);

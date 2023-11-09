@@ -16,6 +16,7 @@ import {
   changePhoto,
   getAllFriendsInfo,
   getFriendsRequestNotifications,
+  changeUserInfo,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
 import {config} from '../config.js';
@@ -89,6 +90,19 @@ class UserController {
       const myId = request.user.id;
       const photoUrl = request.body.photoUrl;
       const res = await changePhoto(myId, photoUrl);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+  async changeUserInfo(request, response, next) {
+    try {
+      const myId = request.user.id;
+      const value = request.body.value;
+      const infoType = request.body.infoType;
+      const res = await changeUserInfo(myId, value, infoType);
       if (res) {
         response.json(res);
       }

@@ -181,6 +181,25 @@ export async function changePhoto(userId: string, photoUrl: string) {
   }
 }
 
+export async function changeUserInfo(
+  userId: string,
+  value: string,
+  infoType: string,
+) {
+  const isSet = await set(
+    `user_info`,
+    `'${infoType}'`,
+    `'${value}'`,
+    `userIdInfo`,
+    `'${userId}'`,
+  );
+  if ((isSet as any).affectedRows === 1) {
+    return 'You have successfully changed your avatar';
+  } else {
+    return false;
+  }
+}
+
 export async function addFriend(myId: string, friendId: string) {
   const isSet = await addFriendStatusInfo(myId, friendId);
   if ((isSet as any).affectedRows === 1) {
@@ -241,7 +260,7 @@ export async function saveMessage(DATA) {
 
 export async function refresh(refreshToken: string) {
   const userData = validateRefreshToken(refreshToken) as JwtPayload;
-  const user = await findUserByEmail(userData.email) as any;
+  const user = (await findUserByEmail(userData.email)) as any;
   if (user.refreshToken) {
     const { accessToken, refreshToken } = generateJwtTokens({
       email: user.email,
