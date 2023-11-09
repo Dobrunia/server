@@ -17,6 +17,8 @@ import {
   getAllFriendsInfo,
   getFriendsRequestNotifications,
   changeUserInfo,
+  isInfoExist,
+  createUserInfo,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
 import {config} from '../config.js';
@@ -102,6 +104,10 @@ class UserController {
       const myId = request.user.id;
       const value = request.body.value;
       const infoType = request.body.infoType;
+      const isExist = await isInfoExist(myId);
+      if (!isExist) {
+        const res2 = await createUserInfo(myId);
+      }
       const res = await changeUserInfo(myId, value, infoType);
       if (res) {
         response.json(res);

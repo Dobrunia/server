@@ -18,7 +18,7 @@ import {
   FriendsRequestNotifications,
   returnAllUserPost,
   findUserInfoById,
-  setUserInfo,
+  createUserInfoTable,
 } from './sqlwrapper.js';
 import { generateJwtTokens, validateRefreshToken } from './token-service.js';
 import bcrypt from 'bcryptjs';
@@ -199,6 +199,22 @@ export async function changeUserInfo(
   } else {
     return false;
   }
+}
+
+export async function isInfoExist(myId: string) {
+  const res = await find(`user_info`, '`userIdInfo` = ?', myId);
+  if (!res) {
+    throw Error('not found');
+  }
+  return res[0];
+}
+
+export async function createUserInfo(myId: string) {
+  const res = await createUserInfoTable(myId);
+  if (!res) {
+    throw Error('not found');
+  }
+  return res[0];
 }
 
 export async function addFriend(myId: string, friendId: string) {
