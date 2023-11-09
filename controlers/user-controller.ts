@@ -21,7 +21,7 @@ import {
   createUserInfo,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
-import {config} from '../config.js';
+import { config } from '../config.js';
 
 class UserController {
   async authorization(request, response, next) {
@@ -51,13 +51,12 @@ class UserController {
         DATA.passwordHash,
       );
       if (userID) {
-        try{
+        try {
           await emailVerification(
             DATA.email,
             `${config.serverUrl}/api/emailverification/${userID}`,
           );
-        }
-        catch (error) {
+        } catch (error) {
           //TODO:: retry
         }
       }
@@ -107,10 +106,17 @@ class UserController {
       const isExist = await isInfoExist(myId);
       if (!isExist) {
         const res2 = await createUserInfo(myId);
-      }
-      const res = await changeUserInfo(myId, value, infoType);
-      if (res) {
-        response.json(res);
+        if (res2) {
+          const res = await changeUserInfo(myId, value, infoType);
+          if (res) {
+            response.json(res);
+          }
+        }
+      } else {
+        const res = await changeUserInfo(myId, value, infoType);
+        if (res) {
+          response.json(res);
+        }
       }
     } catch (error) {
       next(error);
