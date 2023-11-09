@@ -122,12 +122,9 @@ export async function createUserInfoTable(
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      "INSERT INTO `dobru238_websocketchat`.`user_info` (`userIdInfo`, `scrollingText`, `telegramLink`, `steamLink`, `shikimoriLink`, `textStatus`) VALUES (?, '', '', '', '', '')",
+      "INSERT INTO `dobru238_websocketchat`.`user_info` (`userIdInfo`, `scrollingText`, `telegramLink`, `steamLink`, `shikimoriLink`, `textStatus`, `backgroundStyle`) VALUES (?, '', '', '', '', '', '')",
       myId,
     );
-    // const results = await conn.query<RowDataPacket[]>(
-    //   `INSERT INTO posts (id, wallId, authorId, text, photos, files) VALUES (NULL, '${DATA.wallId}', '${DATA.authorId}', '${DATA.postText}', '${DATA.photo}', '${DATA.file}');`,
-    // );
     return results[0];
   } catch (ex) {
     console.log(ex);
