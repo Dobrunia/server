@@ -102,6 +102,21 @@ export async function set(
   }
 }
 
+export async function setUserInfo(
+  userId: string,
+  value: string,
+  infoType: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      `UPDATE users SET ${infoType} = ${value} WHERE userIdInfo = ${userId};`,
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(

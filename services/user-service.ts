@@ -18,6 +18,7 @@ import {
   FriendsRequestNotifications,
   returnAllUserPost,
   findUserInfoById,
+  setUserInfo,
 } from './sqlwrapper.js';
 import { generateJwtTokens, validateRefreshToken } from './token-service.js';
 import bcrypt from 'bcryptjs';
@@ -186,13 +187,7 @@ export async function changeUserInfo(
   value: string,
   infoType: string,
 ) {
-  const isSet = await set(
-    `user_info`,
-    `${infoType}`,
-    `'${value}'`,
-    `userIdInfo`,
-    `'${userId}'`,
-  );
+  const isSet = await setUserInfo(userId, value, infoType);
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully changed your info';
   } else {
