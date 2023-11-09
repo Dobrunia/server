@@ -41,8 +41,8 @@ export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
     const results = await conn.query<RowDataPacket[]>(
       `SELECT *
       FROM users
-      JOIN user_info ON users.id = user_info.userIdInfo
-      WHERE users.id LIKE ?`,
+      LEFT JOIN user_info ON users.id = user_info.userIdInfo
+      WHERE users.id = user_info.userIdInfo OR users.id LIKE ?`,
       [userId],
     );
     return results[0];
