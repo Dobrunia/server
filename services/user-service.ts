@@ -187,12 +187,12 @@ export async function changeUserInfo(
   value: string,
   infoType: string,
 ) {
-  const isSet = await await set(
-    `users`,
-    `${infoType}`,
+  const isSet = await set(
+    `user_info`,
+    `'${infoType}'`,
     `'${value}'`,
-    `id`,
-    `${userId}`,
+    `userIdInfo`,
+    `'${userId}'`,
   );
   if ((isSet as any).affectedRows === 1) {
     return 'You have successfully changed your info';
