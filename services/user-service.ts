@@ -189,8 +189,8 @@ export async function changeUserInfo(
 ) {
   const isSet = await await set(
     `users`,
-    `'${infoType}'`,
-    `${value}`,
+    `${infoType}`,
+    `'${value}'`,
     `id`,
     `${userId}`,
   );
