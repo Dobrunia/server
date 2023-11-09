@@ -276,6 +276,20 @@ class UserController {
       next(error);
     }
   }
+  async saveBackgroundStyleToDb(request, response, next) {
+    try {
+      const res = await changeUserInfo(
+        request.user.id,
+        request.body.style,
+        'backgroundStyle',
+      );
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();

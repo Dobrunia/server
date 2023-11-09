@@ -35,7 +35,6 @@ class MessageController {
         datetime: request.body.message.datetime,
         sendBy: request.body.message.sendBy,
       };
-      console.log(DATA);
       const res = await saveMessage(DATA);
       if (res) {
         response.json(res);
