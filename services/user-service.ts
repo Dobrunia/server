@@ -17,6 +17,7 @@ import {
   returnUsersInChat,
   FriendsRequestNotifications,
   returnAllUserPost,
+  findUserInfoById,
 } from './sqlwrapper.js';
 import { generateJwtTokens, validateRefreshToken } from './token-service.js';
 import bcrypt from 'bcryptjs';
@@ -53,7 +54,8 @@ export async function findUserByName(DATA) {
 }
 
 export async function findUserById(DATA) {
-  const usersArray = await find(`users`, 'id LIKE ?', DATA.search_value);
+  //const usersArray = await find(`users`, 'id LIKE ?', DATA.search_value);
+  const usersArray = await findUserInfoById(DATA.search_value);
   const privateChatsArray = await returnAllPrivateChats();
   for (const user of usersArray) {
     for (const privateChat of privateChatsArray) {

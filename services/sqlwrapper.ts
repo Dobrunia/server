@@ -36,6 +36,21 @@ export async function find(
   }
 }
 
+export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      `SELECT *
+      FROM users
+      JOIN user_info ON users.id = user_info.userIdInfo
+      WHERE users.id = ? AND user_info.userIdInfo = ?`,
+      [userId, userId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function returnAllPrivateChats(): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
