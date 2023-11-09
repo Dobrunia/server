@@ -109,7 +109,7 @@ export async function setUserInfo(
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      `UPDATE users SET ${infoType} = ${value} WHERE userIdInfo = ${userId};`,
+      `UPDATE users SET ${infoType} = '${value}' WHERE userIdInfo = ${userId};`,
     );
     return results[0];
   } catch (ex) {
