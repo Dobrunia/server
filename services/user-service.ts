@@ -188,13 +188,13 @@ export async function changeUserInfo(
 ) {
   const isSet = await set(
     `user_info`,
-    `'${infoType}'`,
-    `'${value}'`,
+    `${infoType}`,
+    `${value}`,
     `userIdInfo`,
-    `'${userId}'`,
+    `${userId}`,
   );
   if ((isSet as any).affectedRows === 1) {
-    return 'You have successfully changed your avatar';
+    return 'You have successfully changed your info';
   } else {
     return false;
   }
