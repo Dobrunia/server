@@ -42,8 +42,8 @@ export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
       `SELECT *
       FROM users
       JOIN user_info ON users.id = user_info.userIdInfo
-      WHERE users.id = ? AND user_info.userIdInfo = ?`,
-      [userId, userId],
+      WHERE users.id LIKE ?`,
+      [userId],
     );
     return results[0];
   } catch (ex) {
