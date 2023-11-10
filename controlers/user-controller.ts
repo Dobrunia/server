@@ -257,6 +257,14 @@ class UserController {
       next(error);
     }
   }
+  async isUserLoggedInCheck(request, response, next) {
+    try {
+      const users_response = request.user.id;
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
+  }
   async getFriendStatusInfo(request, response, next) {
     try {
       const chat_id = await getFriendStatusInfo(

@@ -27,6 +27,7 @@ router.get('/findUserById', checkHeader, userController.findUserById);
 router.get('/getUserPosts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);
 router.get('/getNotifications', checkHeader, userController.getNotifications);
+router.get('/isUserLoggedInCheck', checkHeader, userController.isUserLoggedInCheck);
 router.get('/getFriendStatusInfo/:userId', checkHeader, userController.getFriendStatusInfo);
 router.get('/getAllFriendsInfo/:id', checkHeader, userController.getAllFriendsInfo);
 
