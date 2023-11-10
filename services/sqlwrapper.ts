@@ -242,7 +242,7 @@ export async function returnAllUserPost(
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      `SELECT posts.id AS postsid, posts.wallId, posts.authorId, posts.text, posts.photos, posts.files, users.*
+      `SELECT posts.id AS postsid, posts.wallId, posts.authorId, posts.text, posts.photos, posts.files, posts.postTime, users.*
       FROM posts
       JOIN users ON posts.authorId = users.id
       WHERE posts.wallId LIKE ?`,

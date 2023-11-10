@@ -17,6 +17,7 @@ class MessageController {
         authorId: request.user.id,
         text: request.body.postText ? request.body.postText : '',
         photos: request.file ? request.file.buffer : '',
+        postTime: request.body.postTime,
       };
       const res = await addPost(DATA);
       if (res) {
