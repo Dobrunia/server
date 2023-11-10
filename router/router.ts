@@ -18,6 +18,7 @@ router.post('/deletePost', checkHeader, userController.deletePost);
 router.post('/saveBackgroundStyleToDb', checkHeader, userController.saveBackgroundStyleToDb);
 router.post('/saveColorsToDb', checkHeader, userController.saveColorsToDb);
 router.post('/saveFontToDb', checkHeader, userController.saveFontToDb);
+router.post('/setRain', checkHeader, userController.setRain);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);

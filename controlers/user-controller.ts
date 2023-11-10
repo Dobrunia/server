@@ -328,6 +328,20 @@ class UserController {
       next(error);
     }
   }
+  async setRain(request, response, next) {
+    try {
+      const res = await changeUserInfo(
+        request.user.id,
+        request.body.isRain,
+        'isRain',
+      );
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();
