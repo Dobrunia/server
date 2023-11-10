@@ -294,8 +294,8 @@ class UserController {
     try {
       const res1 = await changeUserInfo(
         request.user.id,
-        request.body.colorInputWhite,
-        'colorInputWhite',
+        request.body.colorInputNav,
+        'colorInputNav',
       );
       const res2 = await changeUserInfo(
         request.user.id,
