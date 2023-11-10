@@ -17,6 +17,7 @@ router.post('/removeFriend', checkHeader, userController.removeFriend);
 router.post('/deletePost', checkHeader, userController.deletePost);
 router.post('/saveBackgroundStyleToDb', checkHeader, userController.saveBackgroundStyleToDb);
 router.post('/saveColorsToDb', checkHeader, userController.saveColorsToDb);
+router.post('/saveFontToDb', checkHeader, userController.saveFontToDb);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
