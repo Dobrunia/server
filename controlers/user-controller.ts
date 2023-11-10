@@ -290,6 +290,30 @@ class UserController {
       next(error);
     }
   }
+  async saveColorsToDb(request, response, next) {
+    try {
+      const res1 = await changeUserInfo(
+        request.user.id,
+        request.body.colorInputWhite,
+        'colorInputWhite',
+      );
+      const res2 = await changeUserInfo(
+        request.user.id,
+        request.body.colorInputAttention,
+        'colorInputAttention',
+      );
+      const res3 = await changeUserInfo(
+        request.user.id,
+        request.body.colorInputNavLightBg,
+        'colorInputNavLightBg',
+      );
+      if (res1 && res2 && res3) {
+        response.json(res3);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();
