@@ -102,12 +102,12 @@ class UserController {
     try {
       const myId = request.user.id;
       const value = request.body.value;
-      const infoType = request.body.infoType;
+      const tableName = request.body.tableName;
       const isExist = await isInfoExist(myId);
       if (!isExist) {
         await createUserInfo(myId);
       }
-      const res = await changeUserInfo(myId, value, infoType);
+      const res = await changeUserInfo(myId, value, tableName);
       if (res) {
         response.json(res);
       }
