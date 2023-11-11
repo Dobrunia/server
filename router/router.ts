@@ -10,15 +10,12 @@ router.post('/authorization', userController.authorization);
 router.post('/registration', userController.registration);
 router.post('/changeUsername', checkHeader, userController.changeUsername);
 router.post('/changePhoto', checkHeader, userController.changePhoto);
-router.post('/changeUserInfo', checkHeader, userController.changeUserInfo);
 router.post('/addFriend', checkHeader, userController.addFriend);
 router.post('/responseToFriendRequest', checkHeader, userController.responseToFriendRequest);
 router.post('/removeFriend', checkHeader, userController.removeFriend);
 router.post('/deletePost', checkHeader, userController.deletePost);
-router.post('/saveBackgroundStyleToDb', checkHeader, userController.saveBackgroundStyleToDb);
+router.post('/changeUserInfo', checkHeader, userController.changeUserInfo);
 router.post('/saveColorsToDb', checkHeader, userController.saveColorsToDb);
-router.post('/saveFontToDb', checkHeader, userController.saveFontToDb);
-router.post('/setRain', checkHeader, userController.setRain);
 
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);

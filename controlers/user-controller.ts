@@ -105,18 +105,11 @@ class UserController {
       const infoType = request.body.infoType;
       const isExist = await isInfoExist(myId);
       if (!isExist) {
-        const res2 = await createUserInfo(myId);
-        if (res2) {
-          const res = await changeUserInfo(myId, value, infoType);
-          if (res) {
-            response.json(res);
-          }
-        }
-      } else {
-        const res = await changeUserInfo(myId, value, infoType);
-        if (res) {
-          response.json(res);
-        }
+        await createUserInfo(myId);
+      }
+      const res = await changeUserInfo(myId, value, infoType);
+      if (res) {
+        response.json(res);
       }
     } catch (error) {
       next(error);
@@ -284,67 +277,18 @@ class UserController {
       next(error);
     }
   }
-  async saveBackgroundStyleToDb(request, response, next) {
-    try {
-      const res = await changeUserInfo(
-        request.user.id,
-        request.body.style,
-        'backgroundStyle',
-      );
-      if (res) {
-        response.json(res);
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
   async saveColorsToDb(request, response, next) {
     try {
-      const res1 = await changeUserInfo(
-        request.user.id,
-        request.body.colorInputNav,
-        'colorInputNav',
-      );
-      const res2 = await changeUserInfo(
-        request.user.id,
-        request.body.colorInputAttention,
-        'colorInputAttention',
-      );
-      const res3 = await changeUserInfo(
-        request.user.id,
-        request.body.colorInputNavLightBg,
-        'colorInputNavLightBg',
-      );
+      const myId = request.user.id;
+      const isExist = await isInfoExist(myId);
+      if (!isExist) {
+        await createUserInfo(myId);
+      }
+      const res1 = await changeUserInfo(myId, request.body.colorInputNav, 'colorInputNav');
+      const res2 = await changeUserInfo(myId, request.body.colorInputAttention, 'colorInputAttention');
+      const res3 = await changeUserInfo(myId, request.body.colorInputNavLightBg, 'colorInputNavLightBg');
       if (res1 && res2 && res3) {
         response.json(res3);
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-  async saveFontToDb(request, response, next) {
-    try {
-      const res = await changeUserInfo(
-        request.user.id,
-        request.body.fontName,
-        'usernameFont',
-      );
-      if (res) {
-        response.json(res);
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-  async setRain(request, response, next) {
-    try {
-      const res = await changeUserInfo(
-        request.user.id,
-        request.body.isRain,
-        'isRain',
-      );
-      if (res) {
-        response.json(res);
       }
     } catch (error) {
       next(error);
