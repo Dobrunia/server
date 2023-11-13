@@ -19,6 +19,7 @@ import {
   changeUserInfo,
   isInfoExist,
   createUserInfo,
+  getMyInfo,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
 import { config } from '../config.js';
@@ -220,6 +221,14 @@ class UserController {
       next(error);
     }
   }
+  async getMyInfo(request, response, next) {
+    try {
+      const users_response = await getMyInfo(request.user.id);
+      response.json(users_response);
+    } catch (error) {
+      next(error);
+    }
+  }
   async getUserPosts(request, response, next) {
     try {
       const search_Id_Value = request.query.search_value;
@@ -284,9 +293,21 @@ class UserController {
       if (!isExist) {
         await createUserInfo(myId);
       }
-      const res1 = await changeUserInfo(myId, request.body.colorInputNav, 'colorInputNav');
-      const res2 = await changeUserInfo(myId, request.body.colorInputAttention, 'colorInputAttention');
-      const res3 = await changeUserInfo(myId, request.body.colorInputNavLightBg, 'colorInputNavLightBg');
+      const res1 = await changeUserInfo(
+        myId,
+        request.body.colorInputNav,
+        'colorInputNav',
+      );
+      const res2 = await changeUserInfo(
+        myId,
+        request.body.colorInputAttention,
+        'colorInputAttention',
+      );
+      const res3 = await changeUserInfo(
+        myId,
+        request.body.colorInputNavLightBg,
+        'colorInputNavLightBg',
+      );
       if (res1 && res2 && res3) {
         response.json(res3);
       }

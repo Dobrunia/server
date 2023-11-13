@@ -76,6 +76,11 @@ export async function findUserById(DATA) {
   return usersArray;
 }
 
+export async function getMyInfo(myId) {
+  const usersArray = await findUserInfoById(myId);
+  return usersArray;
+}
+
 export async function getUserPosts(search_Id_Value: string) {
   return await returnAllUserPost(search_Id_Value);
 }
