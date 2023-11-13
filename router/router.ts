@@ -20,7 +20,7 @@ router.post('/saveColorsToDb', checkHeader, userController.saveColorsToDb);
 router.get('/emailverification/:link', userController.verification);
 router.get('/refresh', userController.refresh);
 router.get('/findUserByName/:userName', checkHeader, userController.findUserByName);
-router.get('/findUserById', checkHeader, userController.findUserById);
+router.get('/findUserById/:userId', checkHeader, userController.findUserById);
 router.get('/getMyInfo', checkHeader, userController.getMyInfo);
 router.get('/getUserPosts', checkHeader, userController.getUserPosts);
 router.get('/allUsers', checkHeader, userController.returnAllUsers);

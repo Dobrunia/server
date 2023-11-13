@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import * as http from 'http';
-import {config} from '../config.js';
+import { config } from '../config.js';
 
 export function initSocket(app) {
   const server = http.createServer(app);
@@ -10,17 +10,23 @@ export function initSocket(app) {
     },
   });
   io.on('connection', (socket) => {
-    socket.broadcast.emit('user connected', {
-      userId: (socket as any).userId,
-      chatId: (socket as any).chatId,
-    });
-    socket.join((socket as any).chatId);
-    socket.on('private message', ({ content, to }) => {
-      socket.to(to).emit('private message', {
-        content,
-        from: (socket as any).userId,
+    if ((socket as any).chatId) {
+      socket.broadcast.emit('user connected', {
+        userId: (socket as any).userId,
+        chatId: (socket as any).chatId,
       });
-    });
+      socket.join((socket as any).chatId);
+      socket.on('private message', ({ content, to }) => {
+        socket.to(to).emit('private message', {
+          content,
+          from: (socket as any).userId,
+        });
+      });
+    } else {
+      socket.broadcast.emit('user online', {
+        userId: (socket as any).userId, //сохранять в бд
+      });
+    }
   });
 
   io.use((socket, next) => {

@@ -212,7 +212,7 @@ class UserController {
   async findUserById(request, response, next) {
     try {
       const DATA = {
-        search_value: request.query.search_value,
+        search_value: request.params.userId,
         myId: request.user.id,
       };
       const users_response = await findUserById(DATA);
