@@ -5,6 +5,7 @@ import {
   returnMessages,
   writeNewUserInChat,
 } from '../services/chat-service.js';
+import { returnAllUsersInChat } from '../services/sqlwrapper.js';
 
 class ChatController {
   async returnAllUserChats(request, response, next) {
@@ -56,6 +57,15 @@ class ChatController {
         request.params.hostUserId,
       );
       response.json(chatId);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findCompanionsData(request, response, next) {
+    try {
+      const result = await returnAllUsersInChat(request.params.chatId);
+      response.json(result);
     } catch (error) {
       next(error);
     }

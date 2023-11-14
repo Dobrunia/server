@@ -40,3 +40,5 @@ router.post('/writeNewUserInChat', checkHeader, chatController.writeNewUserInCha
 router.get('/findChatByUserId/:id', checkHeader, chatController.findChatByUserId);
 router.get('/getMessagesByChatId/:chatId', checkHeader, chatController.getMessagesByChatId);
 router.get('/returnActiveChats', checkHeader, chatController.returnAllUserChats);
+router.get('/findCompanionsData/:chatId', checkHeader, chatController.findCompanionsData);
+

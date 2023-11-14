@@ -42,7 +42,7 @@ export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
       `SELECT * FROM users LEFT JOIN user_info ON users.id = user_info.userIdInfo WHERE users.id LIKE ?`,
       [userId],
     );
-    return results[0];
+    return await results[0];
   } catch (ex) {
     console.log(ex);
   }
@@ -65,6 +65,20 @@ export async function returnUsersInChat(
   try {
     const results = await conn.query<RowDataPacket[]>(
       'SELECT * FROM `users_in_chats` WHERE `chatID` = ?',
+      [chatId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function returnAllUsersInChat(
+  chatId,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'SELECT * FROM users WHERE id IN (SELECT userID FROM users_in_chats WHERE chatID = ?)',
       [chatId],
     );
     return results[0];
