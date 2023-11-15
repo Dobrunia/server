@@ -54,7 +54,7 @@ class ChatController {
     try {
       const chatId = await returnChatId(
         request.params.id,
-        request.params.hostUserId,
+        request.user.id,
       );
       response.json(chatId);
     } catch (error) {
