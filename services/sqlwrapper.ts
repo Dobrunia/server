@@ -60,12 +60,12 @@ export async function returnAllPrivateChats(): Promise<mysql.RowDataPacket[]> {
 }
 
 export async function returnUsersInChat(
-  chatId,
+  chatID,
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
       'SELECT * FROM `users_in_chats` WHERE `chatID` = ?',
-      [chatId],
+      [chatID],
     );
     return results[0];
   } catch (ex) {

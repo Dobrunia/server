@@ -31,23 +31,25 @@ export async function findUserByName(DATA) {
   for (const user of usersArray) {
     for (const privateChat of privateChatsArray) {
       const usersInChat = await returnUsersInChat(privateChat.id);
-      if (
-        (usersInChat[0].userID == DATA.myId ||
-          usersInChat[1].userID == DATA.myId) &&
-        (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
-      ) {
-        // if (DATA.myId == user.id) {
-        //   console.log('Это я');
-        //   user.chatId = null;
-        //   break;
-        // } else {
-        // console.log('Есть чат');
-        user.chatId = privateChat.id;
-        break;
-        // }
-      } else {
-        // console.log('Нет чата');
-        user.chatId = null;
+      if (usersInChat[0]) {
+        if (
+          (usersInChat[0].userID == DATA.myId ||
+            usersInChat[1].userID == DATA.myId) &&
+          (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
+        ) {
+          // if (DATA.myId == user.id) {
+          //   console.log('Это я');
+          //   user.chatId = null;
+          //   break;
+          // } else {
+          // console.log('Есть чат');
+          user.chatId = privateChat.id;
+          break;
+          // }
+        } else {
+          // console.log('Нет чата');
+          user.chatId = null;
+        }
       }
     }
   }
@@ -61,15 +63,17 @@ export async function findUserById(DATA) {
   for (const user of usersArray) {
     for (const privateChat of privateChatsArray) {
       const usersInChat = await returnUsersInChat(privateChat.id);
-      if (
-        (usersInChat[0].userID == DATA.myId ||
-          usersInChat[1].userID == DATA.myId) &&
-        (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
-      ) {
-        user.chatId = privateChat.id;
-        break;
-      } else {
-        user.chatId = null;
+      if (usersInChat[0]) {
+        if (
+          (usersInChat[0].userID == DATA.myId ||
+            usersInChat[1].userID == DATA.myId) &&
+          (usersInChat[0].userID == user.id || usersInChat[1].userID == user.id)
+        ) {
+          user.chatId = privateChat.id;
+          break;
+        } else {
+          user.chatId = null;
+        }
       }
     }
   }
