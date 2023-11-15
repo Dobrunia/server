@@ -31,7 +31,7 @@ export async function findUserByName(DATA) {
   for (const user of usersArray) {
     for (const privateChat of privateChatsArray) {
       const usersInChat = await returnUsersInChat(privateChat.id);
-      if (usersInChat[0]) {
+      if (usersInChat[0] && usersInChat[1]) {
         if (
           (usersInChat[0].userID == DATA.myId ||
             usersInChat[1].userID == DATA.myId) &&
@@ -63,7 +63,7 @@ export async function findUserById(DATA) {
   for (const user of usersArray) {
     for (const privateChat of privateChatsArray) {
       const usersInChat = await returnUsersInChat(privateChat.id);
-      if (usersInChat[0]) {
+      if (usersInChat[0] && usersInChat[1]) {
         if (
           (usersInChat[0].userID == DATA.myId ||
             usersInChat[1].userID == DATA.myId) &&
