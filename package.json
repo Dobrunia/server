@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon main.ts",
     "start": "cross-env NODE_ENV=production node dist/main.js",
-    "postinstall": "tsc",
+    "build": "tsc",
     "watch-node": "nodemon dist/main.js",
     "watch-ts": "tsc -w"
   },
