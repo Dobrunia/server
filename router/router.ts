@@ -28,6 +28,7 @@ router.get('/getNotifications', checkHeader, userController.getNotifications);
 router.get('/isUserLoggedInCheck', checkHeader, userController.isUserLoggedInCheck);
 router.get('/getFriendStatusInfo/:userId', checkHeader, userController.getFriendStatusInfo);
 router.get('/getAllFriendsInfo/:id', checkHeader, userController.getAllFriendsInfo);
+router.get('/getAllMyFriends', checkHeader, userController.getAllMyFriends);
 
 //messageController
 router.post('/addPost', checkHeader, multer.single('photo'), messageController.addPost);

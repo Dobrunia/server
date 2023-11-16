@@ -280,8 +280,16 @@ class UserController {
   }
   async getAllFriendsInfo(request, response, next) {
     try {
-      const chatId = await getAllFriendsInfo(request.params.id);
-      response.json(chatId);
+      const friendsInfo = await getAllFriendsInfo(request.params.id);
+      response.json(friendsInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllMyFriends(request, response, next) {
+    try {
+      const friendsInfo = await getAllFriendsInfo(request.user.id);
+      response.json(friendsInfo);
     } catch (error) {
       next(error);
     }
