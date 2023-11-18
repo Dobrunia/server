@@ -19,6 +19,7 @@ import {
   returnAllUserPost,
   findUserInfoById,
   createUserInfoTable,
+  newMessagesNotifications,
 } from './sqlwrapper.js';
 import { generateJwtTokens, validateRefreshToken } from './token-service.js';
 import bcrypt from 'bcryptjs';
@@ -318,6 +319,10 @@ export async function returnAllUsers() {
 
 export async function getFriendsRequestNotifications(myId: string) {
   return await FriendsRequestNotifications(myId);
+}
+
+export async function getnewMessagesNotifications(myId: string) {
+  return await newMessagesNotifications(myId);
 }
 
 export async function getFriendStatusInfo(myId: string, userId: string) {

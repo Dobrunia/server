@@ -171,6 +171,23 @@ export async function FriendsRequestNotifications(
   }
 }
 
+export async function newMessagesNotifications(
+  myId: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<mysql.RowDataPacket[]>(
+      `SELECT *
+      FROM new_massage_notifications
+      JOIN users ON users.id = new_massage_notifications.user_id_from
+      WHERE new_massage_notifications.user_id_to = ?`,
+      [myId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function findFriendStatusInfo(
   myId: string,
   userId: string,

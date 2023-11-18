@@ -20,6 +20,7 @@ import {
   isInfoExist,
   createUserInfo,
   getMyInfo,
+  getnewMessagesNotifications,
 } from '../services/user-service.js';
 import { emailVerification } from '../services/mail-service.js';
 import { config } from '../config.js';
@@ -251,10 +252,13 @@ class UserController {
   }
   async getNotifications(request, response, next) {
     try {
-      const users_response = await getFriendsRequestNotifications(
+      const friends_requests = await getFriendsRequestNotifications(
         request.user.id,
       );
-      response.json(users_response);
+      const new_messages_requests = await getnewMessagesNotifications(
+        request.user.id,
+      );
+      response.json(friends_requests.concat(new_messages_requests));
     } catch (error) {
       next(error);
     }
