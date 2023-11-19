@@ -318,13 +318,14 @@ export async function returnFriends(userId: string) {
   }
 }
 
-export async function updateUserStatus(
-  user_id: string,
-): Promise<mysql.RowDataPacket[]> {
+export async function updateUserStatus(user_id: string): Promise<mysql.RowDataPacket[]> {
   try {
+    const currentTime = Math.floor(new Date().getTime() / 1000); // Unix-время в секундах
+    const targetTime = currentTime + (15 * 60); // Добавляем 15 минут к текущему времени в секундах
+      
     const results = await conn.query<RowDataPacket[]>(
-      'UPDATE users SET status = NOW() WHERE id = ?',
-      [user_id],
+      'UPDATE users SET status = FROM_UNIXTIME(?) WHERE id = ?',
+      [targetTime, user_id],
     );
     return results[0];
   } catch (ex) {
