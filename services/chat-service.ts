@@ -29,7 +29,7 @@ export async function writeNewUserInChat(DATA) {
 
 export async function returnMessages(chatId) {
   const results = await conn.query<RowDataPacket[]>(
-    'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = ? ORDER BY `datetime` ASC',
+    'SELECT m.*, u.id as userId, u.username, u.email, u.avatar, u.status, u.permission FROM `messages`AS m LEFT JOIN users AS u ON u.Id = m.sendBy WHERE `chatID` = ? ORDER BY `datetime` ASC',
     [chatId],
   );
   return results[0].map((u) => {

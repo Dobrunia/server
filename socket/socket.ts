@@ -34,13 +34,13 @@ export function initSocket(app) {
         chatId: to,
         datetime: new Date(),
       };
-      let notifData = {
-        user_id_from: (socket as any).userId,
-        chat_id_to: to,
-        message_content: content,
-      }
+      // let notifData = {
+      //   user_id_from: (socket as any).userId,
+      //   chat_id_to: to,
+      //   message_content: content,
+      // }
       await saveMessageToDb(DATA);
-      await saveNewMessageNotification(notifData);
+      //await saveNewMessageNotification(notifData);
       io.to(to.toString()).emit('private message', {
         content,
         from: (socket as any).userId,
