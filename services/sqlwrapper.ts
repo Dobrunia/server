@@ -322,9 +322,11 @@ export async function updateUserStatus(
   user_id: string,
 ): Promise<mysql.RowDataPacket[]> {
   try {
+    const now = new Date();
+    const isoDate = now.toISOString();
     const results = await conn.query<RowDataPacket[]>(
-      'UPDATE users SET status = NOW() WHERE id = ?',
-      [user_id],
+      'UPDATE users SET status = ? WHERE id = ?',
+      [isoDate, user_id],
     );
     return results[0];
   } catch (ex) {
