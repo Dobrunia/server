@@ -322,17 +322,9 @@ export async function updateUserStatus(
   user_id: string,
 ): Promise<mysql.RowDataPacket[]> {
   try {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = ('0' + (now.getMonth() + 1)).slice(-2); // Добавляем ведущий ноль, если месяц < 10
-    const day = ('0' + now.getDate()).slice(-2); // Добавляем ведущий ноль, если день < 10
-    const hours = ('0' + now.getHours()).slice(-2); // Добавляем ведущий ноль, если час < 10
-    const minutes = ('0' + now.getMinutes()).slice(-2); // Добавляем ведущий ноль, если минута < 10
-
-    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
     const results = await conn.query<RowDataPacket[]>(
-      'UPDATE users SET status = ? WHERE id = ?',
-      [formattedDate, user_id],
+      'UPDATE users SET status = NOW() WHERE id = ?',
+      [user_id],
     );
     return results[0];
   } catch (ex) {
