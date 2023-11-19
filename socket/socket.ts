@@ -1,7 +1,11 @@
 import { Server } from 'socket.io';
 import * as http from 'http';
 import { config } from '../config.js';
-import { saveMessageToDb, saveNewMessageNotification } from '../services/sqlwrapper.js';
+import {
+  saveMessageToDb,
+  saveNewMessageNotification,
+  updateUserStatus,
+} from '../services/sqlwrapper.js';
 
 let io;
 
@@ -12,8 +16,8 @@ export function initSocket(app) {
       origin: [config.cors],
     },
   });
-  io.on('connection', (socket) => {
-    //status
+  io.on('connection', async (socket) => {
+    await updateUserStatus((socket as any).userId);
     // console.log('user connected: '+  (socket as any).userId);
     socket.broadcast.emit('user connected', {
       userId: (socket as any).userId,

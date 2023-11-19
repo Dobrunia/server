@@ -60,6 +60,7 @@ export async function returnAllUserChats(userId): Promise<Chat[]> {
     chat.chatId = ch.chatID;
     chat.name = ch.username;
     chat.avatar = ch.avatar;
+    chat.status = ch.status;
     chat.last_message = ch.content;
     chat.datetime = ch.datetime;
     return chat;

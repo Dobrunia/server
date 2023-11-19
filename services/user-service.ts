@@ -117,7 +117,7 @@ export async function saveUser(
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXjVdhI2sR7J-TH0AImmVysoT76AQahg6Tc2bkR8LidQ&s';
   }
   const result = await conn.query<ResultSetHeader>(
-    'INSERT INTO `users` (`id`, `username`, `email`, `password`, `avatar`, `permission`, `isActivated`) VALUES(NULL, ?, ?, ?, ?, 1, false)',
+    'INSERT INTO `users` (`id`, `username`, `email`, `password`, `avatar`, `status`, `permission`, `isActivated`) VALUES(NULL, ?, ?, ?, ?, NULL, 1, false)',
     [username, email, passwordHash, avatarUrl],
   );
   return result[0].insertId;

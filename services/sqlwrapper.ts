@@ -157,7 +157,9 @@ export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
-export async function saveNewMessageNotification(DATA): Promise<mysql.RowDataPacket[]> {
+export async function saveNewMessageNotification(
+  DATA,
+): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
       'INSERT INTO `new_massage_notifications`(`id`, `user_id_from`, `chat_id_to`, `message_content`) VALUES (NULL,?,?,?)',
@@ -309,6 +311,20 @@ export async function returnFriends(userId: string) {
         "WHERE `status` = 'accepted' AND (`user_id` = ? OR `friend_id` = ?)" +
         ') AND `id` <> ?',
       [userId, userId, userId, userId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function updateUserStatus(
+  user_id: string,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'UPDATE users SET status = NOW() WHERE id = ?',
+      [user_id],
     );
     return results[0];
   } catch (ex) {
