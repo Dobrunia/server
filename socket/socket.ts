@@ -1,42 +1,55 @@
 import { Server } from 'socket.io';
 import * as http from 'http';
 import { config } from '../config.js';
+import { saveMessageToDb, saveNewMessageNotification } from '../services/sqlwrapper.js';
+
+let io;
 
 export function initSocket(app) {
   const server = http.createServer(app);
-  const io = new Server(server, {
+  io = new Server(server, {
     cors: {
       origin: [config.cors],
     },
   });
   io.on('connection', (socket) => {
-    if ((socket as any).chatId) {
-      socket.broadcast.emit('user connected', {
-        userId: (socket as any).userId,
-        chatId: (socket as any).chatId,
+    //status
+    // console.log('user connected: '+  (socket as any).userId);
+    socket.broadcast.emit('user connected', {
+      userId: (socket as any).userId,
+    });
+    socket.on('join', (chatId) => {
+      //console.log('user joined chatId: '+ chatId +" user: "+  (socket as any).userId + " socket: "+ socket.id);
+      socket.join(chatId.toString());
+    });
+    socket.on('private message', async ({ content, to }) => {
+      //console.log(content);
+      let DATA = {
+        content,
+        sendBy: (socket as any).userId,
+        chatId: to,
+        datetime: new Date(),
+      };
+      let notifData = {
+        user_id_from: (socket as any).userId,
+        chat_id_to: to,
+        message_content: content,
+      }
+      await saveMessageToDb(DATA);
+      await saveNewMessageNotification(notifData);
+      io.to(to.toString()).emit('private message', {
+        content,
+        from: (socket as any).userId,
       });
-      socket.join((socket as any).chatId);
-      socket.on('private message', ({ content, to }) => {
-        socket.to(to).emit('private message', {
-          content,
-          from: (socket as any).userId,
-        });
-      });
-    } else {
-      socket.broadcast.emit('user online', {
-        userId: (socket as any).userId, //сохранять в бд
-      });
-    }
+    });
   });
 
   io.use((socket, next) => {
     const userId = socket.handshake.auth.userId;
-    const chatId = socket.handshake.auth.chatId;
     if (!userId) {
       return next(new Error('invalid username'));
     }
     (socket as any).userId = userId;
-    (socket as any).chatId = chatId;
     next();
   });
   server.listen(config.port, () => {

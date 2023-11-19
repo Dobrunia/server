@@ -255,10 +255,11 @@ class UserController {
       const friends_requests = await getFriendsRequestNotifications(
         request.user.id,
       );
-      const new_messages_requests = await getnewMessagesNotifications(
-        request.user.id,
-      );
-      response.json(friends_requests.concat(new_messages_requests));
+      response.json(friends_requests);
+      // const new_messages_requests = await getnewMessagesNotifications(
+      //   request.user.id,
+      // );
+      //response.json(friends_requests.concat(new_messages_requests));
     } catch (error) {
       next(error);
     }

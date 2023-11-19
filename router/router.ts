@@ -33,6 +33,7 @@ router.get('/getAllMyFriends', checkHeader, userController.getAllMyFriends);
 //messageController
 router.post('/addPost', checkHeader, multer.single('photo'), messageController.addPost);
 router.post('/saveMessage', checkHeader, messageController.saveMessage);
+//router.post('/saveNewMessageNotification', checkHeader, messageController.saveNewMessageNotification);
 
 //chatController
 router.post('/createNewChat', checkHeader, chatController.createNewChat);

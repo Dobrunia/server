@@ -157,6 +157,18 @@ export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   }
 }
 
+export async function saveNewMessageNotification(DATA): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'INSERT INTO `new_massage_notifications`(`id`, `user_id_from`, `chat_id_to`, `message_content`) VALUES (NULL,?,?,?)',
+      [DATA.user_id_from, DATA.chat_id_to, DATA.message_content],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function FriendsRequestNotifications(
   myId: string,
 ): Promise<mysql.RowDataPacket[]> {
