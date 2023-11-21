@@ -176,7 +176,7 @@ export async function createUserInfoTable(
 
 export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   try {
-    const now = c;
+    const now = new Date();
     const isoDate = now.toISOString();
     const results = await conn.query<RowDataPacket[]>(
       'INSERT INTO `messages`(`id`, `content`, `sendBy`, `chatID`, `datetime`) VALUES (NULL,?,?,?,?)',
