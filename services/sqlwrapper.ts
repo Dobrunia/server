@@ -48,7 +48,9 @@ export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
   }
 }
 
-export async function getCommentsByPost(postId): Promise<mysql.RowDataPacket[]> {
+export async function getCommentsByPost(
+  postId,
+): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
       `SELECT c.*, u.avatar, u.id AS userId
@@ -174,9 +176,11 @@ export async function createUserInfoTable(
 
 export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
   try {
+    const now = c;
+    const isoDate = now.toISOString();
     const results = await conn.query<RowDataPacket[]>(
       'INSERT INTO `messages`(`id`, `content`, `sendBy`, `chatID`, `datetime`) VALUES (NULL,?,?,?,?)',
-      [DATA.content, DATA.sendBy, DATA.chatId, DATA.datetime],
+      [DATA.content, DATA.sendBy, DATA.chatId, isoDate],
     );
     return results[0];
   } catch (ex) {

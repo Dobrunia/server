@@ -32,7 +32,6 @@ export function initSocket(app) {
         content,
         sendBy: (socket as any).userId,
         chatId: to,
-        datetime: new Date(),
       };
       // let notifData = {
       //   user_id_from: (socket as any).userId,
