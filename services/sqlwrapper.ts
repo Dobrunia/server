@@ -48,6 +48,21 @@ export async function findUserInfoById(userId): Promise<mysql.RowDataPacket[]> {
   }
 }
 
+export async function getCommentsByPost(postId): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      `SELECT c.*, u.avatar, u.id AS userId
+      FROM comments c
+      LEFT JOIN users u ON c.authorId = u.id
+      WHERE c.postId = ?`,
+      [postId],
+    );
+    return await results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 export async function returnAllPrivateChats(): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
@@ -125,6 +140,18 @@ export async function setPost(DATA): Promise<mysql.RowDataPacket[]> {
     // const results = await conn.query<RowDataPacket[]>(
     //   `INSERT INTO posts (id, wallId, authorId, text, photos, files) VALUES (NULL, '${DATA.wallId}', '${DATA.authorId}', '${DATA.postText}', '${DATA.photo}', '${DATA.file}');`,
     // );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function saveComment(DATA): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'INSERT INTO comments SET ?',
+      DATA,
+    );
     return results[0];
   } catch (ex) {
     console.log(ex);
@@ -287,10 +314,12 @@ export async function returnAllUserPost(
 ): Promise<mysql.RowDataPacket[]> {
   try {
     const results = await conn.query<RowDataPacket[]>(
-      `SELECT posts.id AS postsid, posts.wallId, posts.authorId, posts.text, posts.photos, posts.files, posts.postTime, users.*
+      `SELECT posts.id AS postsid, posts.wallId, posts.authorId, posts.text, posts.photos, posts.files, posts.postTime, users.*, COUNT(comments.postId) AS commentCount
       FROM posts
       JOIN users ON posts.authorId = users.id
-      WHERE posts.wallId LIKE ?`,
+      LEFT JOIN comments ON posts.id = comments.postId
+      WHERE posts.wallId LIKE ?
+      GROUP BY posts.id`,
       [wallId],
     );
     return results[0];

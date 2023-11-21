@@ -32,8 +32,12 @@ router.get('/getAllMyFriends', checkHeader, userController.getAllMyFriends);
 
 //messageController
 router.post('/addPost', checkHeader, multer.single('photo'), messageController.addPost);
+router.post('/saveComment', checkHeader, messageController.saveComment);
 router.post('/saveMessage', checkHeader, messageController.saveMessage);
 //router.post('/saveNewMessageNotification', checkHeader, messageController.saveNewMessageNotification);
+
+router.get('/getCommentsByPostId/:postId', checkHeader, messageController.getCommentsByPostId);
+
 
 //chatController
 router.post('/createNewChat', checkHeader, chatController.createNewChat);

@@ -1,3 +1,4 @@
+import { getCommentsByPost, saveComment } from '../services/sqlwrapper.js';
 import { addPost, saveMessage } from '../services/user-service.js';
 
 import Multer from 'multer';
@@ -28,6 +29,22 @@ class MessageController {
     }
   }
 
+  async saveComment(request, response, next) {
+    try {
+      const DATA = {
+        postId: request.body.postId,
+        authorId: request.body.authorId === null ? request.body.authorId : request.user.id,
+        commentText: request.body.commentText,
+      };
+      const res = await saveComment(DATA);
+      if (res) {
+        response.json(res);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async saveMessage(request, response, next) {
     try {
       const DATA = {
@@ -40,6 +57,15 @@ class MessageController {
       if (res) {
         response.json(res);
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCommentsByPostId(request, response, next) {
+    try {
+      const users_response = await getCommentsByPost(request.params.postId);
+      response.json(users_response);
     } catch (error) {
       next(error);
     }
