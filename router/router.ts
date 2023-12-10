@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { userController } from '../controlers/user-controller.js';
 import { chatController } from '../controlers/chat-controller.js';
+import { musicController } from '../controlers/music-controller.js';
 import { messageController, multer } from '../controlers/message-controller.js';
 import { checkHeader } from '../middlewares/auth.js';
 
@@ -48,3 +49,10 @@ router.get('/getMessagesByChatId/:chatId', checkHeader, chatController.getMessag
 router.get('/returnActiveChats', checkHeader, chatController.returnAllUserChats);
 router.get('/findCompanionsData/:chatId', checkHeader, chatController.findCompanionsData);
 
+//musicController
+import Multer from 'multer';
+const upload = Multer({ dest: 'uploads/' });
+
+router.post('/saveMp3ToServer', checkHeader, upload.fields([{ name: 'audioFile' }, { name: 'imageFile' }]), musicController.saveAudio);
+
+router.get('/getAllServerTracks', checkHeader, musicController.getAllTracks);
