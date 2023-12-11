@@ -366,3 +366,59 @@ export async function updateUserStatus(
     console.log(ex);
   }
 }
+
+export async function returnPlaylistsByAuthor(
+  userId: number,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<mysql.RowDataPacket[]>(
+      'SELECT * FROM `playlists` WHERE `authorId` = ?',
+      [userId],
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function savePlaylist(DATA): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'INSERT INTO playlists SET ?',
+      DATA,
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function saveAudioToPlaylist(
+  audioId,
+  playlistId,
+): Promise<mysql.RowDataPacket[]> {
+  try {
+    const songsArray = await conn.query<RowDataPacket[]>(
+      'SELECT songsArray FROM playlists WHERE id = ?',
+      [playlistId],
+    );
+
+    let newSongsArray = audioId;
+    if (songsArray[0][0]) {
+      const currentSongsArray = songsArray[0][0].songsArray;
+      newSongsArray = `${currentSongsArray}_${audioId}`;
+
+      if (currentSongsArray.includes(audioId)) {
+        playlistId = undefined;
+      }
+    }
+
+    const res = await conn.query<RowDataPacket[]>(
+      'UPDATE playlists SET songsArray = ? WHERE id = ?',
+      [newSongsArray, playlistId],
+    );
+    return res[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}

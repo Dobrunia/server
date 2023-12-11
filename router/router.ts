@@ -54,6 +54,10 @@ import Multer from 'multer';
 const upload = Multer({ dest: 'uploads/' });
 
 router.post('/saveMp3ToServer', checkHeader, upload.fields([{ name: 'audioFile' }, { name: 'imageFile' }]), musicController.saveAudio);
+router.post('/savePlaylistToDb', checkHeader, multer.single('playlistPhoto'), musicController.savePlaylist);
+router.post('/addAudioToPlaylist', checkHeader, musicController.addAudioToPlaylist);
 
 router.get('/getAllServerTracks', checkHeader, musicController.getAllTracks);
 router.get('/getTrackByString/:string', checkHeader, musicController.getTrackByString);
+router.get('/getTrackBySongsArray/:songsarray', checkHeader, musicController.getTrackBySongsArray);
+router.get('/returnMyPlaylists', checkHeader, musicController.returnMyPlaylists);
