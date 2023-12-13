@@ -6,7 +6,7 @@ import {
   saveAudioToPlaylist,
   savePlaylist,
 } from '../services/sqlwrapper.js';
-import { uuid } from 'uuidv4';
+import { v1 } from 'uuid';
 const readFileAsync = promisify(fs.readFile);
 
 class MusicController {
@@ -30,7 +30,7 @@ class MusicController {
         ? request.files['imageFile'][0]
         : null;
 
-      const trackId = uuid();
+      const trackId = v1();
       const folderName = `${trackName}_${trackAuthor}_${trackId}`; // Генерация уникального id
       const folderPath = path.join('uploads', folderName);
       if (fs.existsSync(folderPath)) {
