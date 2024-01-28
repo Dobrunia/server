@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { userController } from '../controlers/user-controller.js';
 import { chatController } from '../controlers/chat-controller.js';
 import { musicController } from '../controlers/music-controller.js';
+import { programsController } from '../controlers/programs-controller.js';
 import { messageController, multer } from '../controlers/message-controller.js';
 import { checkHeader } from '../middlewares/auth.js';
 
@@ -34,7 +35,7 @@ router.get('/getAllMyFriends', checkHeader, userController.getAllMyFriends);
 //messageController
 router.post('/addPost', checkHeader, multer.single('photo'), messageController.addPost);
 router.post('/saveComment', checkHeader, messageController.saveComment);
-router.post('/saveMessage', checkHeader, messageController.saveMessage);
+// router.post('/saveMessage', checkHeader, messageController.saveMessage);
 //router.post('/saveNewMessageNotification', checkHeader, messageController.saveNewMessageNotification);
 
 router.get('/getCommentsByPostId/:postId', checkHeader, messageController.getCommentsByPostId);
@@ -61,3 +62,8 @@ router.get('/getAllServerTracks', checkHeader, musicController.getAllTracks);
 router.get('/getTrackByString/:string', checkHeader, musicController.getTrackByString);
 router.get('/getTrackBySongsArray/:songsarray', checkHeader, musicController.getTrackBySongsArray);
 router.get('/returnMyPlaylists', checkHeader, musicController.returnMyPlaylists);
+
+//programs-controller
+router.post('/checkNewRecord', checkHeader, programsController.checkNewRecord);
+
+router.get('/returnAllRecords', checkHeader, programsController.returnAllRecords);

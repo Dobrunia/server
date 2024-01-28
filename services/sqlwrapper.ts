@@ -18,6 +18,43 @@ setInterval(() => {
   conn.query('select 1');
 }, 240000);
 
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
+  return text.replace(/[&<>"']/g, function (m) {
+    return map[m];
+  });
+}
+function escapeSql(text) {
+  return text.replace(/[\0\x08\x09\x1a\n\r"'\\%_]/g, function (char) {
+    switch (char) {
+      case '\0':
+        return '\\0';
+      case '\x08':
+        return '\\b';
+      case '\x09':
+        return '\\t';
+      case '\x1a':
+        return '\\z';
+      case '\n':
+        return '\\n';
+      case '\r':
+        return '\\r';
+      case '"':
+      case "'":
+      case '\\':
+      case '%':
+      case '_':
+        return '\\' + char; // экранирование специальных символов
+    }
+  });
+}
+
 export async function find(
   tableName: string,
   searchClause?: string,
@@ -180,7 +217,7 @@ export async function saveMessageToDb(DATA): Promise<mysql.RowDataPacket[]> {
     const isoDate = now.toISOString();
     const results = await conn.query<RowDataPacket[]>(
       'INSERT INTO `messages`(`id`, `content`, `sendBy`, `chatID`, `datetime`) VALUES (NULL,?,?,?,?)',
-      [DATA.content, DATA.sendBy, DATA.chatId, isoDate],
+      [escapeSql(escapeHtml(DATA.content)), DATA.sendBy, DATA.chatId, isoDate],
     );
     return results[0];
   } catch (ex) {
@@ -418,6 +455,42 @@ export async function saveAudioToPlaylist(
       [newSongsArray, playlistId],
     );
     return res[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+//memory_numbers
+export async function returnAllRecords(): Promise<mysql.RowDataPacket[]> {
+  try {
+    const results = await conn.query<RowDataPacket[]>(
+      'SELECT memory_numbers_records.*, users.avatar FROM memory_numbers_records JOIN users ON memory_numbers_records.userId = users.id',
+    );
+    return results[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function returnRecord(grid): Promise<mysql.RowDataPacket[]> {
+  try {
+    const result = await conn.query<RowDataPacket[]>(
+      'SELECT `time` FROM `memory_numbers_records` WHERE `grid` = ?',
+      [grid],
+    );
+    return result[0];
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function setRecord(userId, time, grid): Promise<mysql.RowDataPacket[]> {
+  try {
+    const result = await conn.query<RowDataPacket[]>(
+      'UPDATE `memory_numbers_records` SET `userId` = ?, `time` = ? WHERE `grid` = ?',
+      [userId, time, grid],
+    );
+    return result[0];
   } catch (ex) {
     console.log(ex);
   }
