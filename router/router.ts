@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { userController } from '../controlers/user-controller.js';
+import { newsController } from '../controlers/news-controller.js';
 import { chatController } from '../controlers/chat-controller.js';
 import { musicController } from '../controlers/music-controller.js';
 import { programsController } from '../controlers/programs-controller.js';
@@ -67,3 +68,6 @@ router.get('/returnMyPlaylists', checkHeader, musicController.returnMyPlaylists)
 router.post('/checkNewRecord', checkHeader, programsController.checkNewRecord);
 
 router.get('/returnAllRecords', checkHeader, programsController.returnAllRecords);
+
+//news
+router.get('/returnCnnNews', checkHeader, newsController.returnCnnNews);
