@@ -9,7 +9,7 @@ Link: [Memessenger](https://memessenger.ru/)
 + Commenting on posts (Anonymous commenting available)
 + "Apps" tab for various applications and games
 + Music integration
-+ "Cats" tab for generating random cat images ^_^
++ "Cats" tab for generating random cat images 🐱
 
 ## Technologies
 + Express.js
